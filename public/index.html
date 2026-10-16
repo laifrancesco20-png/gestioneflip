@@ -2,228 +2,788 @@
 <html lang="it">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>FIP Silver Alghero – Coordinamento</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>FIP Silver Alghero 2027 – Coordinamento</title>
+<link rel="icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,300..600,0..1,0&display=block">
 <style>
+/* Design dal progetto Stitch "FIP Silver Alghero 2027": blu porto, verde mare, superfici azzurrine, Plus Jakarta Sans. */
 :root {
-  --bg: #f3f6f5; --surface: #ffffff; --ink: #15202b; --muted: #5b6977; --line: #dbe3e6;
-  --accent: #0d6b76; --accent-ink: #ffffff; --soft: #e3f0f1;
-  --warn: #8a5300; --warn-bg: #fbeed6; --ok: #23764a; --ok-bg: #e2f3ea; --danger: #b42318;
+  --bg: #f8f9ff;
+  --surface: #ffffff;
+  --surface-2: #eff4ff;
+  --surface-3: #e5eeff;
+  --surface-4: #dce9ff;
+  --ink: #0b1c30;
+  --muted: #41484d;
+  --faint: #71787e;
+  --line: #dce4ef;
+  --primary: #00354e;
+  --primary-2: #0e4d6c;
+  --green: #006b5f;
+  --green-2: #00897a;
+  --teal: #6df5e1;
+  --danger: #ba1a1a;
+  --danger-bg: #ffdad6;
+  --danger-ink: #93000a;
+  --amber: #d97706;
+  --amber-bg: #fef3c7;
+  --amber-ink: #92400e;
+  --ok: #059669;
+  --ok-bg: #d1fae5;
+  --blue: #2563eb;
+  --blue-bg: #dbeafe;
+  --indigo: #4f46e5;
+  --indigo-dark: #312e81;
+  --indigo-bg: #e0e7ff;
+  --radius: 12px;
+  --shadow: 0 1px 2px rgba(11, 28, 48, .06), 0 1px 8px rgba(14, 77, 108, .05);
+  --font: "Plus Jakarta Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color-scheme: light;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0f1719; --surface: #172126; --ink: #e6eef0; --muted: #97a6ad; --line: #2a3840;
-    --accent: #5fc3cf; --accent-ink: #0b1517; --soft: #1d3138;
-    --warn: #f2b35c; --warn-bg: #33270f; --ok: #6fd49a; --ok-bg: #153125; --danger: #ff8a80;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0f1719; --surface: #172126; --ink: #e6eef0; --muted: #97a6ad; --line: #2a3840;
-  --accent: #5fc3cf; --accent-ink: #0b1517; --soft: #1d3138;
-  --warn: #f2b35c; --warn-bg: #33270f; --ok: #6fd49a; --ok-bg: #153125; --danger: #ff8a80;
-  color-scheme: dark;
-}
 *, *::before, *::after { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; }
-body {
-  background: var(--bg); color: var(--ink);
-  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 0 48px;
-  max-width: 960px; margin-inline: auto;
-}
+html, body { margin: 0; }
+body { background: var(--bg); color: var(--ink); font: 400 14px/1.5 var(--font); -webkit-font-smoothing: antialiased; }
+body.no-scroll { overflow: hidden; }
 [hidden] { display: none !important; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-h1 { font-size: 18px; margin: 0; font-weight: 650; }
-h2 { font-size: 15px; margin: 0 0 10px; font-weight: 650; }
-.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 0 12px; flex-wrap: wrap; }
-.meta { color: var(--muted); font-size: 13px; }
-nav { display: flex; gap: 6px; overflow-x: auto; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
-nav button {
-  background: none; border: 0; border-bottom: 2px solid transparent; border-radius: 0;
-  color: var(--muted); padding: 10px 10px; white-space: nowrap;
+:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: var(--green); }
+h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
+p { margin: 0; }
+
+.ms {
+  font-family: "Material Symbols Outlined"; font-weight: normal; font-style: normal;
+  font-size: 20px; line-height: 1; display: inline-block; vertical-align: middle;
+  letter-spacing: normal; text-transform: none; white-space: nowrap; direction: ltr;
+  font-variation-settings: "FILL" 0, "wght" 450, "GRAD" 0, "opsz" 24;
+  width: 1em; overflow: hidden; flex: none;
 }
-nav button[aria-current="page"] { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-bottom: 14px; min-width: 0; }
-.grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
-form.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
-label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); flex: 1 1 150px; min-width: 0; }
-input, select, textarea {
-  font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line);
-  border-radius: 8px; padding: 8px 10px; min-width: 0; width: 100%;
+.ms.fill { font-variation-settings: "FILL" 1, "wght" 450, "GRAD" 0, "opsz" 24; }
+.ms.sm { font-size: 16px; }
+.ms.xs { font-size: 14px; }
+
+/* ---------- elementi base ---------- */
+.card { background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; min-width: 0; }
+.muted { color: var(--muted); }
+.faint { color: var(--faint); }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border: 0; border-radius: 10px; padding: 11px 16px; font-weight: 700; font-size: 14px;
+  background: var(--surface-3); color: var(--primary); text-decoration: none; white-space: nowrap;
 }
-textarea { min-height: 80px; resize: vertical; }
-button {
-  font: inherit; cursor: pointer; color: var(--ink); background: var(--surface);
-  border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; white-space: nowrap;
+.btn:hover { filter: brightness(.97); }
+.btn:disabled { opacity: .6; cursor: progress; }
+.btn-dark { background: var(--primary); color: #fff; }
+.btn-green { background: var(--green); color: #fff; }
+.btn-light { background: var(--surface-3); color: var(--primary); }
+.btn-ghost { background: transparent; color: var(--primary); }
+.btn-danger { background: var(--danger-bg); color: var(--danger-ink); }
+.btn-block { width: 100%; }
+.btn-square { width: 48px; height: 48px; padding: 0; border-radius: 12px; }
+.icon-btn {
+  display: inline-grid; place-items: center; width: 36px; height: 36px; border-radius: 999px;
+  border: 0; background: transparent; color: var(--muted);
 }
-button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
-button.ghost { background: transparent; color: var(--muted); }
-button.danger { color: var(--danger); }
-.item {
-  display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: space-between;
-  padding: 12px 0; border-top: 1px solid var(--line);
+.icon-btn:hover { background: var(--surface-2); }
+.tag {
+  display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 6px;
+  font-size: 11px; font-weight: 700; line-height: 18px; white-space: nowrap;
+  background: var(--surface-3); color: var(--primary);
 }
-.item:first-child { border-top: 0; padding-top: 4px; }
-.item .body { flex: 1 1 220px; min-width: 0; overflow-wrap: anywhere; }
-.item .actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
-.item select { width: auto; }
-.pill { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 99px; background: var(--soft); color: var(--accent); margin-right: 6px; }
-.pill.warn { background: var(--warn-bg); color: var(--warn); }
-.pill.ok { background: var(--ok-bg); color: var(--ok); }
-.empty { color: var(--muted); padding: 8px 0; margin: 0; }
-.err { color: var(--danger); font-size: 14px; min-height: 1.2em; margin: 8px 0 0; }
-.day { font-size: 13px; color: var(--muted); font-weight: 600; margin: 14px 0 2px; }
-details summary { cursor: pointer; color: var(--accent); font-size: 13px; margin-top: 6px; }
-.history { font-size: 13px; color: var(--muted); padding-left: 16px; margin: 6px 0 0; }
-.login { max-width: 360px; margin: 14vh auto 0; }
-.login h1 { margin-bottom: 4px; }
-.chat { display: flex; flex-direction: column; gap: 10px; min-height: 240px; max-height: 60vh; overflow-y: auto; padding-bottom: 8px; }
-.bubble { max-width: 88%; padding: 9px 12px; border-radius: 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
-.bubble.user { align-self: flex-end; background: var(--accent); color: var(--accent-ink); border-bottom-right-radius: 3px; }
-.bubble.assistant { align-self: flex-start; background: var(--soft); border-bottom-left-radius: 3px; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
-.chips button { font-size: 13px; color: var(--muted); }
-#f-chat { display: flex; gap: 8px; margin-top: 10px; }
-#f-chat input { flex: 1; }
+.tag-danger { background: var(--danger); color: #fff; }
+.tag-danger-soft { background: var(--danger-bg); color: var(--danger-ink); }
+.tag-amber { background: var(--amber-bg); color: var(--amber-ink); }
+.tag-ok { background: var(--ok-bg); color: #065f46; }
+.tag-blue { background: var(--blue-bg); color: #1e40af; }
+.tag-grey { background: #eceff3; color: var(--muted); }
+.tag-indigo { background: var(--indigo-bg); color: var(--indigo-dark); }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 3px 10px;
+  font-size: 11px; font-weight: 700; background: var(--surface-3); color: var(--primary); white-space: nowrap;
+}
+.pill .dot, .pchip .dot { width: 7px; height: 7px; border-radius: 99px; background: var(--c, var(--green)); flex: none; }
+.pchip {
+  display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 3px 10px 3px 8px;
+  font-size: 12px; font-weight: 700; color: var(--primary);
+  background: color-mix(in srgb, var(--c) 12%, white); white-space: nowrap; max-width: 100%;
+  overflow: hidden; text-overflow: ellipsis;
+}
+.avatar {
+  --size: 32px;
+  display: inline-grid; place-items: center; width: var(--size); height: var(--size); border-radius: 999px;
+  background: var(--c, var(--primary)); color: #fff; font-weight: 700; font-size: calc(var(--size) * .36);
+  flex: none; letter-spacing: .02em; box-shadow: 0 0 0 2px #fff;
+}
+.avatar.lg { --size: 40px; }
+.avatar.sm { --size: 26px; }
+.avatar.xs { --size: 22px; }
+.avatars { display: inline-flex; }
+.avatars .avatar + .avatar { margin-left: -6px; }
+
+.section { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.section-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.section-head h2 { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 800; color: var(--primary); }
+.section-head h2::before { content: ""; width: 8px; height: 8px; border-radius: 99px; background: var(--h, var(--primary)); }
+.link-btn { border: 0; background: none; color: var(--green); font-weight: 700; font-size: 12px; display: inline-flex; align-items: center; gap: 2px; padding: 4px; }
+.empty { padding: 18px; text-align: center; color: var(--muted); background: var(--surface); border-radius: var(--radius); border: 1px dashed var(--line); }
+
+.field { display: flex; flex-direction: column; gap: 6px; font-size: 12px; font-weight: 700; color: var(--muted); min-width: 0; }
+.field.full { grid-column: 1 / -1; }
+.input, .field input, .field select, .field textarea {
+  width: 100%; min-width: 0; border: 1px solid transparent; background: var(--surface-2); border-radius: 10px;
+  padding: 11px 12px; font-size: 15px; font-weight: 500; color: var(--ink);
+}
+.field textarea { min-height: 96px; resize: vertical; }
+.input:focus, .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--green); background: #fff; }
+.search { display: flex; align-items: center; gap: 10px; background: var(--surface); border-radius: 12px; box-shadow: var(--shadow); padding: 0 14px; flex: 1; min-width: 0; }
+.search input { border: 0; background: transparent; padding: 13px 0; font-size: 15px; width: 100%; min-width: 0; }
+.search input:focus { outline: none; }
+.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 999px; padding: 8px 14px;
+  background: var(--surface); box-shadow: var(--shadow); color: var(--primary); font-weight: 700; font-size: 13px; white-space: nowrap;
+}
+.chip .count { background: var(--surface-3); border-radius: 99px; padding: 0 7px; font-size: 11px; }
+.chip.on { background: var(--primary); color: #fff; }
+.chip.on .count { background: rgba(255,255,255,.18); }
+.chip .dot { width: 8px; height: 8px; border-radius: 99px; background: var(--c); }
+.seg { display: flex; gap: 4px; background: var(--surface-3); padding: 4px; border-radius: 12px; }
+.seg button {
+  flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 9px;
+  background: transparent; color: var(--primary); padding: 9px 12px; font-weight: 700; white-space: nowrap;
+}
+.seg button.on { background: var(--primary); color: #fff; box-shadow: var(--shadow); }
+.seg.light button.on { background: #fff; color: var(--primary); }
+.seg .count { background: rgba(255,255,255,.18); border-radius: 99px; padding: 0 8px; font-size: 12px; }
+.err { color: var(--danger); font-size: 13px; font-weight: 600; min-height: 1em; }
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+  background: var(--ink); color: #fff; padding: 10px 16px; border-radius: 10px; font-weight: 600; z-index: 60;
+  max-width: calc(100% - 32px); box-shadow: 0 8px 24px rgba(0,0,0,.2);
+}
+
+/* ---------- accesso ---------- */
+.login { min-height: 100vh; display: grid; place-items: start center; padding: 56px max(16px, env(safe-area-inset-left, 0px)) 32px max(16px, env(safe-area-inset-right, 0px));
+  background: radial-gradient(420px 260px at 50% 90px, rgba(109,245,225,.28), transparent 70%), var(--bg); }
+.login-wrap { width: 100%; max-width: 380px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center; }
+.login-logo { width: 88px; height: 88px; border-radius: 22px; background: #fff; padding: 4px; box-shadow: 0 8px 30px rgba(0,53,78,.18); position: relative; }
+.login-logo img { width: 80px; height: 80px; border-radius: 18px; display: block; }
+.login-logo::after { content: ""; position: absolute; right: -4px; bottom: -4px; width: 16px; height: 16px; border-radius: 99px; background: var(--green); border: 3px solid #fff; }
+.login h1 { font-size: 26px; font-weight: 800; color: var(--primary); letter-spacing: -.02em; margin-top: 6px; }
+.login .where { color: var(--muted); display: flex; align-items: center; gap: 4px; font-weight: 500; }
+.restricted { display: inline-flex; align-items: center; gap: 8px; background: #fff; border-radius: 99px; padding: 5px 12px; font-size: 11px; font-weight: 800; color: var(--primary); letter-spacing: .02em; box-shadow: var(--shadow); }
+.restricted::before { content: ""; width: 7px; height: 7px; border-radius: 99px; background: var(--green); }
+.login-card { width: 100%; margin-top: 16px; text-align: left; border-top: 4px solid transparent; border-image: linear-gradient(90deg, var(--primary), var(--green)) 1; border-radius: 0 0 16px 16px; padding: 22px 20px; display: flex; flex-direction: column; gap: 14px; }
+.login-card .lbl { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--primary); font-size: 15px; }
+.login-card .input { font-size: 18px; padding: 15px 16px; letter-spacing: .06em; }
+.login-card .help { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 12px; }
+.login-card .btn { padding: 15px; font-size: 16px; box-shadow: 0 6px 16px rgba(0,53,78,.25); }
+.login-foot { margin-top: 18px; color: var(--muted); font-size: 12px; display: flex; align-items: center; gap: 6px; }
+
+/* ---------- struttura app ---------- */
+.topbar {
+  position: sticky; top: 0; z-index: 30; display: flex; align-items: center; gap: 10px;
+  padding: calc(10px + env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) 10px max(16px, env(safe-area-inset-left, 0px));
+  background: rgba(255,255,255,.88); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1px 0 var(--line);
+}
+.brand { display: flex; align-items: center; gap: 10px; min-width: 0; flex: 1; }
+.brand img { width: 36px; height: 36px; border-radius: 9px; }
+.brand-name { display: flex; align-items: center; gap: 6px; font-weight: 800; color: var(--primary); font-size: 16px; line-height: 1.2; }
+.brand-name .yr { background: var(--surface-3); color: var(--green); border-radius: 6px; padding: 0 6px; font-size: 11px; }
+.brand-sub { font-size: 12px; color: var(--muted); font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.top-actions { display: flex; align-items: center; gap: 6px; }
+
+.layout { display: block; }
+.sidenav { display: none; }
+main {
+  padding: 16px max(16px, env(safe-area-inset-right, 0px)) calc(100px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  max-width: 1180px; margin: 0 auto; min-width: 0;
+}
+.view { display: flex; flex-direction: column; gap: 20px; }
+
+.bottomnav {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; display: grid; grid-template-columns: repeat(6, 1fr);
+  background: rgba(255,255,255,.96); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 -1px 0 var(--line);
+  padding: 6px max(4px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(4px, env(safe-area-inset-left, 0px));
+}
+.navbtn {
+  position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; border: 0; background: none;
+  color: var(--muted); font-size: 11px; font-weight: 600; padding: 6px 0; border-radius: 10px; min-width: 0;
+}
+.navbtn .ms { font-size: 23px; }
+.navbtn[aria-current="page"] { color: var(--primary); font-weight: 800; }
+.navbtn[aria-current="page"] .ms { font-variation-settings: "FILL" 1, "wght" 500, "GRAD" 0, "opsz" 24; }
+.navbtn .badge {
+  position: absolute; top: 1px; left: calc(50% + 6px); min-width: 17px; height: 17px; border-radius: 99px; padding: 0 4px;
+  background: var(--primary); color: #fff; font-size: 10px; font-weight: 800; display: grid; place-items: center; box-shadow: 0 0 0 2px #fff;
+}
+
+@media (min-width: 960px) {
+  .bottomnav { display: none; }
+  .layout { display: grid; grid-template-columns: 232px minmax(0, 1fr); }
+  .sidenav {
+    display: flex; flex-direction: column; gap: 4px; position: sticky; top: 57px; align-self: start;
+    height: calc(100vh - 57px); padding: 20px 12px; border-right: 1px solid var(--line); background: #fff;
+  }
+  .sidenav .navbtn { flex-direction: row; justify-content: flex-start; gap: 12px; font-size: 14px; padding: 11px 14px; }
+  .sidenav .navbtn[aria-current="page"] { background: var(--surface-3); }
+  .sidenav .navbtn .badge { position: static; margin-left: auto; box-shadow: none; }
+  main { padding: 28px 32px 48px; width: 100%; }
+}
+
+/* ---------- oggi ---------- */
+.hero { display: flex; flex-direction: column; gap: 8px; }
+.hero .chip-soft { align-self: flex-start; display: inline-flex; gap: 6px; align-items: center; background: var(--surface-3); color: var(--primary); border-radius: 99px; padding: 4px 12px; font-size: 12px; font-weight: 700; }
+.hero h1 { font-size: 28px; font-weight: 800; color: var(--primary); letter-spacing: -.02em; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 6px 18px; color: var(--muted); font-weight: 500; }
+.hero-meta span { display: inline-flex; align-items: center; gap: 6px; }
+.hero-meta b { color: var(--primary); font-weight: 800; }
+.dash { display: grid; gap: 24px; }
+@media (min-width: 960px) { .dash { grid-template-columns: 1fr 1fr; align-items: start; } }
+
+.task { position: relative; display: flex; flex-direction: column; gap: 8px; cursor: pointer; overflow: hidden; }
+.task.is-late { box-shadow: inset 4px 0 0 var(--danger), var(--shadow); }
+.task-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+.task-top .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.task h3 { font-size: 16px; font-weight: 700; color: var(--primary); line-height: 1.3; overflow-wrap: anywhere; }
+.task .desc { color: var(--muted); font-size: 13px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.task-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; padding-top: 8px; border-top: 1px solid var(--surface-2); font-size: 12px; font-weight: 600; color: var(--muted); }
+.task-foot .due { display: inline-flex; align-items: center; gap: 4px; }
+.task-foot .due.late { color: var(--danger); font-weight: 700; }
+.check {
+  width: 34px; height: 34px; border-radius: 99px; border: 2px solid var(--line); background: #fff; color: transparent;
+  display: grid; place-items: center; flex: none;
+}
+.check:hover { border-color: var(--green); color: var(--green); }
+.check.on { background: var(--green); border-color: var(--green); color: #fff; }
+.task.is-done h3 { text-decoration: line-through; color: var(--faint); }
+
+.doc-mini { display: flex; flex-direction: column; gap: 12px; }
+.doc-mini .row { display: flex; gap: 12px; align-items: flex-start; }
+.doc-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--surface-3); color: var(--primary); display: grid; place-items: center; flex: none; }
+.doc-mini h3 { font-size: 15px; font-weight: 700; color: var(--primary); overflow-wrap: anywhere; }
+.notice { display: flex; align-items: center; gap: 8px; background: var(--amber-bg); color: var(--amber-ink); border-radius: 10px; padding: 8px 12px; font-size: 13px; font-weight: 600; }
+.two-btn { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+.meeting-hero { background: linear-gradient(135deg, #1e1b4b, var(--indigo-dark)); color: #fff; border-radius: 14px; padding: 16px; display: flex; flex-direction: column; gap: 10px; cursor: pointer; }
+.meeting-hero .top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.meeting-hero .lbl { display: inline-flex; align-items: center; gap: 6px; background: rgba(129,140,248,.25); color: #c7d2fe; border-radius: 99px; padding: 3px 10px; font-size: 11px; font-weight: 700; }
+.meeting-hero .when { background: rgba(255,255,255,.12); color: #e0e7ff; border-radius: 8px; padding: 3px 10px; font-weight: 800; font-size: 13px; }
+.meeting-hero h3 { font-size: 18px; font-weight: 800; }
+.meeting-hero .sub { color: #c7d2fe; font-size: 12px; display: flex; align-items: center; gap: 4px; }
+.meeting-hero .foot { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; color: #c7d2fe; }
+.meeting-hero .foot .org::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 99px; background: #34d399; margin-right: 6px; }
+
+.agenda-row { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+.datetile { width: 46px; flex: none; border-radius: 10px; background: var(--surface-3); color: var(--primary); text-align: center; padding: 4px 0; line-height: 1.1; }
+.datetile small { display: block; font-size: 10px; font-weight: 800; text-transform: uppercase; color: var(--muted); }
+.datetile b { font-size: 18px; font-weight: 800; }
+.agenda-row .body { flex: 1; min-width: 0; }
+.agenda-row h4 { font-size: 14px; font-weight: 700; color: var(--primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.agenda-row .meta { font-size: 12px; color: var(--muted); display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.agenda-away { background: color-mix(in srgb, var(--c) 9%, white); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 25%, white); }
+.agenda-away h4 { color: color-mix(in srgb, var(--c) 70%, black); }
+
+.feed { display: flex; flex-direction: column; }
+.feed-row { display: flex; gap: 12px; padding: 12px 0; border-top: 1px solid var(--surface-2); }
+.feed-row:first-child { border-top: 0; padding-top: 0; }
+.feed-row:last-child { padding-bottom: 0; }
+.feed-row p { font-size: 13px; color: var(--ink); overflow-wrap: anywhere; }
+.feed-row p b { font-weight: 700; }
+.feed-row p em { font-style: normal; color: var(--green); font-weight: 700; }
+.feed-row small { display: flex; align-items: center; gap: 4px; color: var(--faint); font-size: 11px; margin-top: 2px; }
+
+/* ---------- compiti ---------- */
+.stat-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 16px; }
+.stat-row b { font-size: 18px; font-weight: 800; color: var(--primary); }
+.new-task { display: flex; flex-direction: column; gap: 12px; }
+.new-task .head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.new-task .head span { display: inline-flex; gap: 8px; align-items: center; font-weight: 800; color: var(--primary); }
+.resp { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 12px; font-weight: 700; color: var(--muted); }
+.pick { position: relative; cursor: pointer; }
+.pick input { position: absolute; opacity: 0; pointer-events: none; }
+.pick .avatar { --size: 36px; opacity: .55; transition: opacity .15s, transform .15s; }
+.pick input:checked + .avatar { opacity: 1; box-shadow: 0 0 0 2px #fff, 0 0 0 4px var(--c); transform: scale(1.04); }
+.pick input:focus-visible + .avatar { outline: 2px solid var(--green); outline-offset: 3px; }
+.nt-foot { display: flex; gap: 8px; }
+.date-field { flex: 1; display: flex; align-items: center; gap: 8px; background: var(--surface-2); border-radius: 12px; padding: 0 12px; color: var(--primary); }
+.date-field input { border: 0; background: transparent; padding: 12px 0; width: 100%; min-width: 0; font-weight: 600; }
+.date-field input:focus { outline: none; }
+
+.board { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(280px, 86%); gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 6px; margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); padding-inline: max(16px, env(safe-area-inset-left, 0px)); scroll-padding-inline: max(16px, env(safe-area-inset-left, 0px)); }
+.column { scroll-snap-align: start; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.col-head { display: flex; align-items: center; gap: 8px; background: var(--surface-4); border-radius: 12px; padding: 10px 14px; font-size: 17px; font-weight: 800; color: var(--primary); }
+.col-head .dot { width: 10px; height: 10px; border-radius: 99px; background: var(--c); }
+.col-head .n { background: #fff; border-radius: 99px; font-size: 12px; padding: 0 8px; }
+@media (min-width: 960px) {
+  .board { grid-auto-flow: row; grid-template-columns: repeat(3, minmax(0, 1fr)); overflow: visible; margin-inline: 0; padding-inline: 0; }
+  .col-switch { display: none !important; }
+}
+.list-card { padding: 4px 16px; }
+.list-row { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid var(--surface-2); cursor: pointer; }
+.list-row:first-child { border-top: 0; }
+.list-row .body { flex: 1; min-width: 0; }
+.list-row h4 { font-size: 14px; font-weight: 700; color: var(--primary); overflow-wrap: anywhere; }
+.list-row .meta { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* ---------- documenti ---------- */
+.toolbar { display: flex; gap: 10px; align-items: stretch; }
+.docs { display: grid; gap: 14px; }
+@media (min-width: 960px) { .docs { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; } }
+.doc { display: flex; flex-direction: column; gap: 10px; }
+.doc-top { display: flex; align-items: center; gap: 8px; }
+.doc-top .icon-btn { margin-left: auto; margin-right: -8px; }
+.ver { background: var(--surface-3); color: var(--primary); border-radius: 6px; padding: 1px 7px; font-size: 12px; font-weight: 800; }
+.doc h3 { font-size: 17px; font-weight: 800; color: var(--primary); overflow-wrap: anywhere; }
+.byline { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; flex-wrap: wrap; }
+.byline .sep { color: var(--faint); }
+.doc.is-new { box-shadow: var(--shadow), inset 4px 0 0 #2563eb; }
+.newbar { display: flex; align-items: center; gap: 8px; background: var(--blue-bg); color: #1e40af; border-radius: 10px; padding: 8px 8px 8px 12px; font-size: 13px; font-weight: 600; }
+.newbar .txt { flex: 1; min-width: 0; }
+.newbar .btn { padding: 6px 12px; font-size: 12px; min-height: 0; }
+.docs-hint { margin: 0; font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: flex-start; }
+.user-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.user-row .info { flex: 1; min-width: 0; }
+.user-row .info b { display: block; color: var(--ink); overflow-wrap: anywhere; }
+.user-row small { color: var(--muted); font-size: 12px; }
+.user-row .icon-btn.armed { background: var(--danger-bg); color: var(--danger-ink); width: auto; padding: 0 10px; font-size: 12px; font-weight: 700; }
+.codebox { display: flex; align-items: center; gap: 8px; background: var(--ok-bg); border-radius: 10px; padding: 10px 12px; }
+.codebox code { flex: 1; font-size: 20px; font-weight: 800; letter-spacing: .08em; color: #065f46; }
+.admin-block, .sheet-sub { grid-column: 1 / -1; min-width: 0; }
+.sheet-sub { font-size: 15px; font-weight: 800; color: var(--primary); margin-top: 6px; }
+.file { display: flex; align-items: center; gap: 10px; background: var(--surface-2); border-radius: 10px; padding: 10px 12px; text-decoration: none; color: var(--primary); font-weight: 700; font-size: 13px; min-width: 0; }
+.file .fname { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.file .ms:first-child { color: var(--danger); }
+.timeline { background: var(--surface-2); border-radius: 12px; padding: 10px 14px; }
+.timeline summary { cursor: pointer; list-style: none; display: flex; align-items: center; gap: 8px; font-weight: 800; color: var(--primary); font-size: 13px; }
+.timeline summary::-webkit-details-marker { display: none; }
+.timeline summary .n { margin-left: auto; color: var(--muted); font-weight: 700; font-size: 12px; }
+.timeline ol { list-style: none; margin: 10px 0 2px; padding: 0 0 0 18px; position: relative; display: flex; flex-direction: column; gap: 12px; }
+.timeline ol::before { content: ""; position: absolute; left: 4px; top: 6px; bottom: 6px; width: 2px; background: var(--surface-4); }
+.timeline li { position: relative; font-size: 13px; }
+.timeline li::before { content: ""; position: absolute; left: -18px; top: 5px; width: 10px; height: 10px; border-radius: 99px; background: #c4ccd6; box-shadow: 0 0 0 3px var(--surface-2); }
+.timeline li.current::before { background: var(--green); }
+.timeline .tl-head { display: flex; justify-content: space-between; gap: 8px; font-weight: 800; color: var(--primary); }
+.timeline .tl-head span { font-weight: 700; color: var(--muted); font-size: 12px; white-space: nowrap; }
+.timeline .tl-by { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* ---------- calendario ---------- */
+.cal-top { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.cal-top .seg { flex: 1 1 220px; }
+.cal-layout { display: grid; gap: 20px; }
+@media (min-width: 960px) { .cal-layout { grid-template-columns: minmax(0, 420px) minmax(0, 1fr); align-items: start; } .cal-side { position: sticky; top: 85px; } }
+.cal-side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.cal-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+.cal-head h2 { font-size: 20px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+.cal-head h2 .ms { color: var(--green); }
+.cal-head p { font-size: 12px; color: var(--muted); font-weight: 600; margin-top: 2px; }
+.cal-nav { display: flex; gap: 6px; }
+.cal-nav button { border: 0; background: var(--surface-2); color: var(--primary); border-radius: 10px; height: 36px; min-width: 36px; padding: 0 10px; font-weight: 700; display: inline-grid; place-items: center; }
+.mgrid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.mgrid .wd { text-align: center; font-size: 11px; font-weight: 800; color: var(--muted); padding: 2px 0 6px; }
+.day {
+  border: 0; background: transparent; border-radius: 10px; padding: 6px 2px; min-height: 48px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+  color: var(--ink); font-weight: 700; font-size: 13px; min-width: 0;
+}
+.day:hover { background: var(--surface-2); }
+.day.out { color: #a7b0ba; }
+.day.inweek { background: var(--surface-3); }
+.day.today .num { background: var(--primary); color: #fff; }
+.day.sel { box-shadow: inset 0 0 0 2px var(--green); }
+.day .num { width: 26px; height: 26px; border-radius: 99px; display: grid; place-items: center; }
+.day .dots { display: flex; gap: 2px; flex-wrap: wrap; justify-content: center; min-height: 6px; }
+.day .dots i { width: 6px; height: 6px; border-radius: 99px; background: var(--c); }
+.mgrid.big .day { min-height: 74px; align-items: stretch; padding: 4px; }
+.mgrid.big .day .num { align-self: center; }
+.mgrid.big .bars { display: flex; flex-direction: column; gap: 2px; }
+.mgrid.big .bars span { display: block; border-radius: 4px; font-size: 9px; font-weight: 800; line-height: 14px; padding: 0 3px; color: #fff; background: var(--c); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.mgrid.big .bars span.away { color: color-mix(in srgb, var(--c) 75%, black); background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--c) 22%, white) 0 4px, color-mix(in srgb, var(--c) 10%, white) 4px 8px); }
+.mgrid.big .bars .more { background: none; color: var(--muted); }
+.filters-label { display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.filters-label span:last-child { text-transform: none; letter-spacing: 0; color: var(--green); font-weight: 700; }
+.agenda { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.day-group { display: flex; flex-direction: column; gap: 10px; }
+.day-head { display: flex; align-items: center; gap: 12px; }
+.day-head .dn { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; background: var(--surface-3); color: var(--primary); font-weight: 800; flex: none; }
+.day-head .dn.today { background: var(--primary); color: #fff; }
+.day-head h3 { font-size: 17px; font-weight: 800; color: var(--primary); }
+.day-head p { font-size: 12px; color: var(--muted); font-weight: 600; }
+.day-empty { font-size: 13px; color: var(--faint); padding: 0 0 0 46px; }
+.ev { border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; cursor: pointer; min-width: 0; }
+.ev-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.time-pill { display: inline-flex; align-items: center; gap: 6px; border-radius: 8px; padding: 3px 10px; font-weight: 800; font-size: 12px; }
+.ev-tag { border-radius: 99px; padding: 2px 10px; font-size: 11px; font-weight: 800; }
+.ev h4 { font-size: 17px; font-weight: 800; line-height: 1.25; overflow-wrap: anywhere; }
+.ev .notes { font-size: 13px; display: flex; gap: 6px; align-items: flex-start; overflow-wrap: anywhere; }
+.ev.meeting { background: linear-gradient(135deg, var(--indigo), #4338ca); color: #fff; box-shadow: 0 6px 16px rgba(79,70,229,.25); }
+.ev.meeting .time-pill { background: rgba(255,255,255,.18); }
+.ev.meeting .ev-tag { background: #fff; color: var(--indigo); }
+.ev.meeting .notes { color: #e0e7ff; }
+.ev.meeting .ev-foot { display: flex; align-items: center; gap: 8px; border-top: 1px solid rgba(255,255,255,.18); padding-top: 8px; font-size: 12px; font-weight: 600; color: #e0e7ff; }
+.ev.meeting .ev-foot .ms { margin-left: auto; }
+.addcal { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; border: 0; border-radius: 99px; padding: 6px 12px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; background: rgba(255,255,255,.16); color: #fff; }
+.addcal:hover { background: rgba(255,255,255,.26); }
+.cal-links { display: flex; flex-direction: column; gap: 8px; grid-column: 1 / -1; }
+.cal-links .btn { justify-content: flex-start; text-decoration: none; }
+.ev.away {
+  color: var(--ink);
+  background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--c) 10%, white) 0 12px, color-mix(in srgb, var(--c) 5%, white) 12px 24px);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 28%, white);
+}
+.ev.away .time-pill { background: #fff; color: color-mix(in srgb, var(--c) 70%, black); }
+.ev.away .ev-tag { background: var(--c); color: #fff; }
+.ev.away .who { display: flex; align-items: center; gap: 6px; font-weight: 800; color: color-mix(in srgb, var(--c) 75%, black); font-size: 14px; }
+.ev.away .who .dot { width: 8px; height: 8px; border-radius: 99px; background: var(--c); }
+.ev.away h4 { color: var(--primary); }
+.ev.away .notes { color: var(--muted); }
+
+/* ---------- note ---------- */
+.page-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.ph-title { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.ph-icon { width: 48px; height: 48px; border-radius: 12px; background: var(--primary); color: #fff; display: grid; place-items: center; flex: none; }
+.ph-icon .ms { font-size: 26px; }
+.ph-title h1 { font-size: 24px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+.ph-title h1 .count { background: var(--surface-3); color: var(--primary); font-size: 12px; border-radius: 99px; padding: 1px 9px; }
+.ph-title p { font-size: 13px; color: var(--muted); font-weight: 500; }
+.notes { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); align-items: start; }
+.note { display: flex; flex-direction: column; gap: 10px; }
+.note-top { display: flex; align-items: center; gap: 8px; }
+.note-top .icon-btn { margin-left: auto; margin-right: -8px; }
+.note h3 { font-size: 17px; font-weight: 800; color: var(--primary); overflow-wrap: anywhere; }
+.note .text { color: var(--ink); font-size: 14px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.note-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 12px; font-weight: 700; color: var(--primary); padding-top: 10px; border-top: 1px solid var(--surface-2); }
+.note-foot .who { display: inline-flex; align-items: center; gap: 8px; }
+.note-foot .when { display: inline-flex; align-items: center; gap: 4px; color: var(--muted); font-weight: 600; }
+
+/* ---------- assistente ---------- */
+.ai-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.ai-head h1 { font-size: 22px; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 8px; }
+.ai-head h1 .ms { color: var(--green); font-size: 26px; }
+.live { display: inline-flex; align-items: center; gap: 6px; background: rgba(109,245,225,.35); color: var(--green); border-radius: 99px; padding: 4px 12px; font-size: 12px; font-weight: 800; white-space: nowrap; }
+.live::before { content: ""; width: 7px; height: 7px; border-radius: 99px; background: var(--green); }
+.suggest { background: var(--surface-3); box-shadow: none; font-weight: 600; }
+.chat { display: flex; flex-direction: column; gap: 14px; padding-bottom: 8px; }
+.day-sep { align-self: center; background: var(--surface-3); color: var(--muted); border-radius: 99px; padding: 2px 12px; font-size: 11px; font-weight: 800; }
+.msg { display: flex; gap: 10px; align-items: flex-end; max-width: 100%; }
+.msg.user { flex-direction: row-reverse; align-self: flex-end; }
+.msg .stack { display: flex; flex-direction: column; gap: 4px; min-width: 0; max-width: min(560px, 82vw); }
+.msg.user .stack { align-items: flex-end; }
+.bubble { border-radius: 16px; padding: 12px 16px; font-size: 14px; overflow-wrap: anywhere; }
+.msg.user .bubble { background: var(--primary); color: #fff; border-bottom-right-radius: 4px; white-space: pre-wrap; }
+.msg.ai { align-items: flex-start; }
+.msg.ai .bubble { background: #fff; box-shadow: var(--shadow); border-top-left-radius: 4px; }
+.msg.ai .bubble .who { font-size: 11px; font-weight: 800; letter-spacing: .06em; color: var(--green); margin-bottom: 6px; }
+.msg.ai .bubble p + p, .msg.ai .bubble ul + p, .msg.ai .bubble p + ul { margin-top: 8px; }
+.msg.ai .bubble ul { margin: 0; padding-left: 18px; }
+.msg.ai .bubble li + li { margin-top: 4px; }
+.msg.ai .bubble strong { color: var(--primary); }
+.msg .time { font-size: 11px; color: var(--muted); font-weight: 700; padding: 0 4px; }
+.ai-avatar { width: 34px; height: 34px; border-radius: 99px; background: rgba(109,245,225,.6); color: var(--primary); display: grid; place-items: center; flex: none; }
+.typing { display: inline-flex; gap: 4px; padding: 4px 0; }
+.typing i { width: 7px; height: 7px; border-radius: 99px; background: var(--faint); animation: blink 1.2s infinite ease-in-out; }
+.typing i:nth-child(2) { animation-delay: .2s; } .typing i:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 0%, 80%, 100% { opacity: .25; } 40% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .typing i { animation: none; } }
+.chat-input {
+  position: sticky; bottom: calc(76px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 8px; align-items: center;
+  background: #fff; border-radius: 999px; box-shadow: 0 6px 24px rgba(0,53,78,.14); padding: 6px 6px 6px 20px;
+}
+.chat-input input { flex: 1; border: 0; background: transparent; padding: 10px 0; font-size: 15px; min-width: 0; }
+.chat-input input:focus { outline: none; }
+.chat-input .send { width: 44px; height: 44px; border-radius: 99px; border: 0; background: var(--green); color: #fff; display: grid; place-items: center; flex: none; }
+@media (min-width: 960px) { .chat-input { bottom: 16px; } }
+
+/* ---------- pannello di modifica ---------- */
+.sheet-wrap { position: fixed; inset: 0; z-index: 50; background: rgba(11,28,48,.42); display: flex; align-items: flex-end; justify-content: center; }
+.sheet {
+  background: #fff; width: 100%; max-width: 560px; max-height: 92vh; overflow-y: auto; border-radius: 20px 20px 0 0;
+  padding: 18px max(18px, env(safe-area-inset-right, 0px)) calc(18px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
+  display: flex; flex-direction: column; gap: 14px; box-shadow: 0 -10px 40px rgba(0,0,0,.2);
+}
+@media (min-width: 700px) { .sheet-wrap { align-items: center; } .sheet { border-radius: 20px; } }
+.sheet header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.sheet h3 { font-size: 19px; font-weight: 800; color: var(--primary); }
+.sheet .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.sheet footer { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.sheet footer .btn-danger { margin-right: auto; }
+.sheet .hint { font-size: 12px; color: var(--muted); font-weight: 500; grid-column: 1 / -1; margin-top: -4px; }
 </style>
 </head>
 <body>
 
+<!-- ===================== ACCESSO ===================== -->
 <section id="login" class="login" hidden>
-  <h1>FIP Silver Alghero 2027</h1>
-  <p class="meta">Coordinamento organizzatori. Inserisci il tuo codice personale.</p>
-  <form id="f-login" class="card">
-    <label>Codice personale
-      <input id="code" type="password" autocomplete="off" required>
-    </label>
-    <p style="margin-top:12px"><button class="primary" type="submit" style="width:100%">Entra</button></p>
-    <p id="login-err" class="err" role="alert"></p>
-  </form>
+  <div class="login-wrap">
+    <div class="login-logo"><img src="logo.png" alt="Logo FIP Silver Alghero" width="80" height="80"></div>
+    <h1>FIP Silver Alghero 2027</h1>
+    <p class="where"><span class="ms sm">location_on</span> 15–19 Settembre • Banchine Porto di Alghero</p>
+    <span class="restricted">AREA RISERVATA COMITATO ORGANIZZATORE</span>
+    <form id="f-login" class="card login-card" autocomplete="off">
+      <label class="lbl" for="code"><span class="ms">lock</span> Codice personale</label>
+      <input id="code" name="code" class="input" type="password" placeholder="Il tuo codice" required autocapitalize="off" spellcheck="false">
+      <p class="help"><span class="ms xs">info</span> Inserisci il codice personale che hai ricevuto dal comitato</p>
+      <button class="btn btn-dark btn-block" type="submit">Entra <span class="ms">arrow_forward</span></button>
+      <p id="login-err" class="err" role="alert"></p>
+    </form>
+    <p class="login-foot"><span class="ms sm">verified_user</span> Accesso riservato allo staff organizzativo FIP Silver Alghero.</p>
+  </div>
 </section>
 
+<!-- ===================== APP ===================== -->
 <div id="app" hidden>
-  <header class="top">
-    <div>
-      <h1>FIP Silver Alghero 2027</h1>
-      <div class="meta" id="who"></div>
+  <header class="topbar">
+    <div class="brand">
+      <img src="logo.png" alt="" width="36" height="36">
+      <div style="min-width:0">
+        <div class="brand-name">FIP Silver Alghero <span class="yr">2027</span></div>
+        <div class="brand-sub" id="brand-sub">15–19 Settembre • Oggi</div>
+      </div>
     </div>
-    <button class="ghost" id="logout" type="button">Esci</button>
+    <div class="top-actions">
+      <button class="icon-btn" id="admin-btn" type="button" data-act="admin" aria-label="Gestisci account" title="Gestisci account" hidden><span class="ms">manage_accounts</span></button>
+      <span id="me-avatar"></span>
+      <button class="icon-btn" type="button" data-act="logout" aria-label="Esci" title="Esci"><span class="ms">logout</span></button>
+    </div>
   </header>
 
-  <nav id="tabs" aria-label="Sezioni">
-    <button type="button" data-tab="oggi" aria-current="page">Oggi</button>
-    <button type="button" data-tab="compiti">Compiti</button>
-    <button type="button" data-tab="documenti">Documenti</button>
-    <button type="button" data-tab="calendario">Calendario</button>
-    <button type="button" data-tab="note">Note</button>
-    <button type="button" data-tab="assistente">Assistente</button>
-  </nav>
+  <div class="layout">
+    <nav class="sidenav" aria-label="Sezioni" id="sidenav"></nav>
 
-  <section data-view="oggi" class="grid">
-    <div class="card"><h2>I miei compiti aperti</h2><div id="o-tasks"></div></div>
-    <div class="card"><h2>Documenti da confermare</h2><div id="o-docs"></div></div>
-    <div class="card"><h2>Prossimi impegni (14 giorni)</h2><div id="o-events"></div></div>
-    <div class="card"><h2>Ultime modifiche</h2><div id="o-changes"></div></div>
-  </section>
+    <main>
+      <!-- OGGI -->
+      <section class="view" data-view="oggi" id="v-oggi"></section>
 
-  <section data-view="compiti" hidden>
-    <form class="card row" id="f-task" data-col="tasks">
-      <label style="flex-basis:100%">Compito<input name="title" required maxlength="200" placeholder="Es. Inviare la domanda al Comune"></label>
-      <label>Responsabile<select name="owner" data-people></select></label>
-      <label>Scadenza<input name="due" type="date"></label>
-      <button class="primary" type="submit">Aggiungi</button>
-    </form>
-    <div class="card" id="l-tasks"></div>
-  </section>
+      <!-- COMPITI -->
+      <section class="view" data-view="compiti" hidden>
+        <div class="seg" id="task-view-switch">
+          <button type="button" data-taskview="board" class="on"><span class="ms">view_kanban</span> Bacheca <span class="count" id="task-total">0</span></button>
+          <button type="button" data-taskview="list"><span class="ms">format_list_bulleted</span> Lista</button>
+        </div>
+        <div class="card stat-row" id="task-stats"></div>
+        <form class="card new-task" id="f-task" autocomplete="off">
+          <div class="head"><span><span class="ms">add_task</span> Nuovo compito</span></div>
+          <input class="input" name="title" required maxlength="200" placeholder="Titolo (es. Lettera al Prefetto)">
+          <div class="resp"><span>Resp:</span><span id="owner-picks" style="display:flex;gap:8px;flex-wrap:wrap"></span></div>
+          <div class="nt-foot">
+            <label class="date-field"><span class="ms">event</span><input type="date" name="due" aria-label="Scadenza"></label>
+            <button class="btn btn-green btn-square" type="submit" aria-label="Aggiungi compito"><span class="ms">add</span></button>
+          </div>
+        </form>
+        <div class="seg light col-switch" id="col-switch"></div>
+        <div id="tasks-area"></div>
+      </section>
 
-  <section data-view="documenti" hidden>
-    <form class="card row" id="f-doc" data-col="docs">
-      <label style="flex-basis:100%">Documento<input name="title" required maxlength="200" placeholder="Es. Lettera al Prefetto"></label>
-      <label>Responsabile<select name="owner" data-people></select></label>
-      <label>Link (OneDrive o Drive)<input name="link" type="url" placeholder="https://"></label>
-      <button class="primary" type="submit">Aggiungi</button>
-    </form>
-    <div class="card" id="l-docs"></div>
-  </section>
+      <!-- DOCUMENTI -->
+      <section class="view" data-view="documenti" hidden>
+        <div class="toolbar">
+          <label class="search"><span class="ms faint">search</span><input id="doc-q" type="search" placeholder="Cerca tra i documenti..."></label>
+          <button class="btn btn-dark btn-square" type="button" data-act="new-doc" aria-label="Nuovo documento" title="Nuovo documento"><span class="ms">note_add</span></button>
+        </div>
+        <div class="chips" id="doc-filters"></div>
+        <p class="docs-hint"><span class="ms sm">info</span><span>Hai modificato un file su OneDrive o Drive? Premi <b>Nuova versione</b>: agli altri il documento comparirà come aggiornato finché non lo aprono.</span></p>
+        <div class="docs" id="l-docs"></div>
+      </section>
 
-  <section data-view="calendario" hidden>
-    <form class="card row" id="f-event" data-col="events">
-      <label style="flex-basis:100%">Titolo<input name="title" required maxlength="200" placeholder="Es. Non disponibile / Riunione organizzatori"></label>
-      <label>Persona<select name="person" data-people></select></label>
-      <label>Tipo<select name="kind"><option value="indisponibile">Non disponibile</option><option value="riunione">Riunione</option></select></label>
-      <label>Giorno<input name="date" type="date" required></label>
-      <label>Dalle<input name="start" type="time"></label>
-      <label>Alle<input name="end" type="time"></label>
-      <button class="primary" type="submit">Aggiungi</button>
-    </form>
-    <div class="card" id="l-events"></div>
-  </section>
+      <!-- CALENDARIO -->
+      <section class="view" data-view="calendario" hidden>
+        <div class="cal-top">
+          <div class="seg light" id="cal-mode"></div>
+          <button class="btn btn-dark" type="button" data-act="new-event"><span class="ms">add_circle</span> Aggiungi impegno</button>
+        </div>
+        <div class="cal-layout">
+          <div class="cal-side">
+            <div class="card" id="cal-card"></div>
+            <div>
+              <div class="filters-label"><span>Membri e categorie</span><span>Tocca per filtrare</span></div>
+              <div class="chips" id="cal-filters"></div>
+            </div>
+          </div>
+          <div class="agenda" id="cal-list"></div>
+        </div>
+      </section>
 
-  <section data-view="note" hidden>
-    <form class="card row" id="f-note" data-col="notes">
-      <label style="flex-basis:100%">Titolo (facoltativo)<input name="title" maxlength="200"></label>
-      <label style="flex-basis:100%">Nota<textarea name="text" required maxlength="2000"></textarea></label>
-      <button class="primary" type="submit">Salva nota</button>
-    </form>
-    <div class="card" id="l-notes"></div>
-  </section>
+      <!-- NOTE -->
+      <section class="view" data-view="note" hidden>
+        <div class="page-head">
+          <div class="ph-title">
+            <span class="ph-icon"><span class="ms">sticky_note_2</span></span>
+            <div><h1>Note <span class="count" id="note-count">0</span></h1><p>Appunti condivisi del comitato</p></div>
+          </div>
+          <button class="btn btn-green" type="button" data-act="new-note"><span class="ms">edit_note</span> Nuova nota</button>
+        </div>
+        <label class="search"><span class="ms faint">search</span><input id="note-q" type="search" placeholder="Cerca parole chiave, contatti, permessi..."></label>
+        <div>
+          <div class="filters-label"><span>Filtra per autore</span></div>
+          <div class="chips" id="note-filters"></div>
+        </div>
+        <div class="notes" id="l-notes"></div>
+      </section>
 
-  <section data-view="assistente" hidden>
-    <div class="card">
-      <div class="chips">
-        <button type="button" data-ask="Chi è libero giovedì alle 18?">Chi è libero giovedì alle 18?</button>
-        <button type="button" data-ask="Cosa devo fare io?">Cosa devo fare io?</button>
-        <button type="button" data-ask="Quali documenti sono ancora da confermare?">Documenti da confermare</button>
-      </div>
-      <div class="chat" id="chat" aria-live="polite"></div>
-      <form id="f-chat">
-        <input name="q" required maxlength="2000" placeholder="Scrivi una domanda sul team, i compiti o il calendario">
-        <button class="primary" type="submit">Chiedi</button>
-      </form>
-      <p class="err" id="chat-err" role="alert"></p>
-    </div>
-  </section>
+      <!-- ASSISTENTE -->
+      <section class="view" data-view="assistente" hidden>
+        <div class="ai-head">
+          <h1><span class="ms">auto_awesome</span> Assistente Torneo FIP Silver</h1>
+          <span class="live">Sempre attivo</span>
+        </div>
+        <p class="muted" style="margin-top:-10px">Chiedi informazioni su compiti, scadenze, documenti e disponibilità dello staff.</p>
+        <div class="chips">
+          <button type="button" class="chip suggest" data-ask="Chi è libero giovedì alle 18?"><span class="ms sm">lightbulb</span> Chi è libero giovedì alle 18?</button>
+          <button type="button" class="chip suggest" data-ask="Cosa devo fare io questa settimana?"><span class="ms sm">assignment</span> Cosa devo fare io?</button>
+          <button type="button" class="chip suggest" data-ask="Quali documenti sono ancora da confermare?"><span class="ms sm">description</span> Documenti da confermare</button>
+          <button type="button" class="chip suggest" data-ask="Quali compiti sono in ritardo e di chi sono?"><span class="ms sm">warning</span> Compiti in ritardo</button>
+        </div>
+        <div class="chat" id="chat" aria-live="polite"><span class="day-sep" id="chat-day">Oggi</span></div>
+        <p class="err" id="chat-err" role="alert"></p>
+        <form class="chat-input" id="f-chat" autocomplete="off">
+          <input name="q" required maxlength="2000" placeholder="Scrivi all'assistente del torneo..." aria-label="Domanda per l'assistente">
+          <button class="send" type="submit" aria-label="Invia"><span class="ms">arrow_upward</span></button>
+        </form>
+      </section>
+    </main>
+  </div>
 
-  <p class="err" id="app-err" role="alert"></p>
+  <nav class="bottomnav" aria-label="Sezioni" id="bottomnav"></nav>
 </div>
 
+<!-- pannello di modifica -->
+<div class="sheet-wrap" id="sheet" hidden>
+  <form class="sheet" id="sheet-form" autocomplete="off" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <header>
+      <h3 id="sheet-title"></h3>
+      <button class="icon-btn" type="button" data-close aria-label="Chiudi"><span class="ms">close</span></button>
+    </header>
+    <div class="grid" id="sheet-body"></div>
+    <p class="err" id="sheet-err" role="alert"></p>
+    <footer>
+      <button class="btn btn-danger" type="button" id="sheet-danger" hidden></button>
+      <button class="btn btn-light" type="button" data-close>Annulla</button>
+      <button class="btn btn-dark" type="submit" id="sheet-submit">Salva</button>
+    </footer>
+  </form>
+</div>
+
+<div class="toast" id="toast" hidden role="status"></div>
+
 <script>
+/* ===================== utilità ===================== */
 const $ = (s, root = document) => root.querySelector(s);
 const $$ = (s, root = document) => [...root.querySelectorAll(s)];
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const ic = (name, cls = "") => `<span class="ms ${cls}" aria-hidden="true">${name}</span>`;
 
-const LABEL = {
-  todo: "Da fare", doing: "In corso", done: "Fatto",
-  bozza: "Bozza", da_confermare: "Da confermare", confermato: "Confermato", inviato: "Inviato",
-  indisponibile: "Non disponibile", riunione: "Riunione",
+const TOURNAMENT_START = new Date(2027, 8, 15);
+const TABS = [
+  { id: "oggi", label: "Oggi", icon: "light_mode" },
+  { id: "compiti", label: "Compiti", icon: "checklist" },
+  { id: "documenti", label: "Documenti", icon: "description" },
+  { id: "calendario", label: "Calendario", icon: "calendar_month" },
+  { id: "note", label: "Note", icon: "sticky_note_2" },
+  { id: "assistente", label: "Assistente", icon: "auto_awesome" },
+];
+const TASK_STATUS = { todo: "Da fare", doing: "In corso", done: "Fatto" };
+const TASK_COLOR = { todo: "#ba1a1a", doing: "#d97706", done: "#059669" };
+const DOC_STATUS = { bozza: "Bozza", da_confermare: "Da confermare", confermato: "Confermato", inviato: "Inviato" };
+const DOC_TAG = { bozza: "tag-grey", da_confermare: "tag-amber", confermato: "tag-ok", inviato: "tag-blue" };
+const DOC_DOT = { bozza: "#71787e", da_confermare: "#d97706", confermato: "#059669", inviato: "#2563eb" };
+const KIND = { indisponibile: "Non disponibile", riunione: "Riunione" };
+const MEETING_COLOR = "#4f46e5";
+const PERSON_COLORS = {
+  "Francesco Lai": "#2563eb",
+  "Luca Spugnavillo": "#d97706",
+  "Luciano Razzoli": "#059669",
+  "Emanuele Dore": "#7c3aed",
+  "Francesco Secchi": "#e11d48",
 };
-const TONE = { done: "ok", confermato: "ok", inviato: "ok", da_confermare: "warn", indisponibile: "warn" };
-const COLLECTION_NAME = { tasks: "Compiti", docs: "Documenti", events: "Calendario", notes: "Note" };
+const FALLBACK_COLORS = ["#0891b2", "#ca8a04", "#db2777", "#4d7c0f", "#9333ea"];
 
-let code = "";
-try { code = localStorage.getItem("fip-code") || ""; } catch {}
-let S = { me: "", people: [], tasks: [], docs: [], events: [], notes: [] };
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch {} },
+  del(k) { try { localStorage.removeItem(k); } catch {} },
+};
+
+let code = store.get("fip-code") || "";
+let S = { me: "", isAdmin: false, people: [], tasks: [], docs: [], events: [], notes: [], seen: {} };
 let lastKey = "";
+const ui = {
+  tab: store.get("fip-tab") || "oggi",
+  taskView: store.get("fip-taskview") || "board",
+  docFilter: "all",
+  noteFilter: "all",
+  calMode: store.get("fip-calmode") || "week",
+  calDate: new Date(),
+  calFilter: "all",
+};
 
-const today = () => {
-  const d = new Date();
-  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  return d.toISOString().slice(0, 10);
-};
-const fmtDate = (s) => {
-  if (!s) return "";
-  const [y, m, d] = s.split("-").map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "short" });
-};
-const fmtWhen = (iso) => (iso ? new Date(iso).toLocaleString("it-IT", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : "");
-const pill = (key) => `<span class="pill ${TONE[key] || ""}">${esc(LABEL[key] || key)}</span>`;
+function colorOf(name) {
+  if (PERSON_COLORS[name]) return PERSON_COLORS[name];
+  const i = Math.max(0, S.people.indexOf(name));
+  return FALLBACK_COLORS[i % FALLBACK_COLORS.length];
+}
+const initials = (name) => (name || "?").split(/\s+/).filter(Boolean).map((w) => w[0]).slice(0, 2).join("").toUpperCase();
+const shortName = (name) => { const p = (name || "").split(" "); return p.length > 1 ? `${p[0][0]}. ${p.slice(1).join(" ")}` : name || ""; };
+const firstName = (name) => (name || "").split(" ")[0];
+const avatar = (name, size = "") => `<span class="avatar ${size}" style="--c:${colorOf(name)}" title="${esc(name)}">${esc(initials(name))}</span>`;
+const pchip = (name) => name ? `<span class="pchip" style="--c:${colorOf(name)}"><i class="dot"></i>${esc(shortName(name))}</span>` : `<span class="pchip" style="--c:#71787e">Nessuno</span>`;
+
+const pad = (n) => String(n).padStart(2, "0");
+const keyOf = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const parseKey = (s) => { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d); };
+const todayKey = () => keyOf(new Date());
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+const fmtShort = (s) => s ? parseKey(s).toLocaleDateString("it-IT", { day: "numeric", month: "short" }) : "";
+const fmtLong = (d) => cap(d.toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "long" }));
+const hhmm = (d) => `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+function weekStart(d) { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; }
+function isoWeek(d) {
+  const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const day = t.getUTCDay() || 7;
+  t.setUTCDate(t.getUTCDate() + 4 - day);
+  const y0 = new Date(Date.UTC(t.getUTCFullYear(), 0, 1));
+  return Math.ceil(((t - y0) / 86400000 + 1) / 7);
+}
+function relTime(iso) {
+  if (!iso) return "";
+  const d = new Date(iso), now = new Date(), min = (now - d) / 60000;
+  if (min < 1) return "adesso";
+  if (min < 60) return `${Math.floor(min)} min fa`;
+  if (d.toDateString() === now.toDateString()) { const h = Math.floor(min / 60); return h === 1 ? "1 ora fa" : `${h} ore fa`; }
+  if (d.toDateString() === addDays(now, -1).toDateString()) return `ieri, ${hhmm(d)}`;
+  return `${d.toLocaleDateString("it-IT", { day: "numeric", month: "short" })}, ${hhmm(d)}`;
+}
+const isLate = (t) => t.due && t.status !== "done" && t.due < todayKey();
+const timeRange = (e) => e.start ? `${e.start}${e.end ? " – " + e.end : ""}` : "Tutto il giorno";
+function fileName(link) {
+  try { const u = new URL(link); const last = decodeURIComponent(u.pathname.split("/").filter(Boolean).pop() || ""); return /\.\w{2,5}$/.test(last) ? last : u.hostname.replace(/^www\./, ""); }
+  catch { return link; }
+}
 const options = (values, selected, labels = {}) =>
-  values.map((v) => `<option value="${esc(v)}" ${v === selected ? "selected" : ""}>${esc(labels[v] || LABEL[v] || v)}</option>`).join("");
+  values.map((v) => `<option value="${esc(v)}" ${v === selected ? "selected" : ""}>${esc(labels[v] || v)}</option>`).join("");
 
+// Documenti con una versione che non ho ancora aperto.
+const seenVer = (d) => (S.seen || {})[d.id] || 0;
+const isUnseen = (d) => seenVer(d) < (d.version || 1);
+function lastUpload(d) {
+  const h = (d.history || []).find((x) => x.version === d.version);
+  return h ? { by: h.by, at: h.at } : { by: d.updatedBy, at: d.updatedAt };
+}
+function unseenText(d) {
+  const up = lastUpload(d);
+  return seenVer(d) === 0
+    ? `Nuovo: aggiunto da <b>${esc(up.by)}</b>, ${esc(relTime(up.at))}`
+    : `Aggiornato a v${d.version} da <b>${esc(up.by)}</b>, ${esc(relTime(up.at))}. Tu avevi visto la v${seenVer(d)}.`;
+}
+
+/* ===================== server ===================== */
 async function api(path, opts = {}) {
   const res = await fetch("/api/" + path, {
     method: opts.method || "GET",
@@ -235,302 +795,889 @@ async function api(path, opts = {}) {
   if (!res.ok) throw new Error(data.error || "Errore " + res.status);
   return data;
 }
-
-function showError(err, where = "#app-err") {
-  $(where).textContent = err.message || String(err);
-  setTimeout(() => { $(where).textContent = ""; }, 6000);
-}
-
-async function refresh() {
+async function refresh(force = false) {
   const data = await api("state");
   const key = JSON.stringify(data);
-  if (key === lastKey) return;
+  if (key === lastKey && !force) return;
   lastKey = key;
   S = data;
   renderAll();
 }
-
 async function saveItem(col, data, id) {
   await api("item", { method: "PUT", body: { collection: col, id, data } });
   await refresh();
 }
-
 async function patchItem(col, id, changes) {
   const item = S[col].find((x) => x.id === id);
   if (!item) return;
-  const { id: _, createdBy, createdAt, updatedBy, updatedAt, ...data } = item;
+  const { id: _id, createdBy, createdAt, updatedBy, updatedAt, ...data } = item;
   await saveItem(col, { ...data, ...changes }, id);
 }
+async function markDocSeen(id) {
+  const d = S.docs.find((x) => x.id === id);
+  if (!d || !isUnseen(d)) return;
+  S.seen = { ...S.seen, [id]: d.version };
+  renderAll();
+  await api("seen", { method: "POST", body: { id } });
+  await refresh();
+}
+async function deleteItem(col, id) {
+  await api(`item?collection=${col}&id=${encodeURIComponent(id)}`, { method: "DELETE" });
+  await refresh();
+}
+let toastTimer;
+function toast(msg) {
+  const t = $("#toast");
+  t.textContent = msg; t.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 3500);
+}
 
-/* ---------- rendering ---------- */
+/* ===================== navigazione ===================== */
+function renderNav() {
+  const badges = {
+    compiti: S.tasks.filter((t) => t.owner === S.me && t.status !== "done").length,
+    documenti: S.docs.filter(isUnseen).length,
+  };
+  const html = TABS.map((t) => `
+    <button type="button" class="navbtn" data-go="${t.id}" ${ui.tab === t.id ? 'aria-current="page"' : ""}>
+      ${ic(t.icon)}<span>${t.label}</span>${badges[t.id] ? `<span class="badge">${badges[t.id]}</span>` : ""}
+    </button>`).join("");
+  $("#bottomnav").innerHTML = html;
+  $("#sidenav").innerHTML = html;
+}
+function showTab(id) {
+  if (!TABS.some((t) => t.id === id)) id = "oggi";
+  ui.tab = id; store.set("fip-tab", id);
+  $$("[data-view]").forEach((v) => { v.hidden = v.dataset.view !== id; });
+  $("#brand-sub").textContent = `15–19 Settembre • ${TABS.find((t) => t.id === id).label}`;
+  renderNav();
+  window.scrollTo({ top: 0 });
+}
+
+/* ===================== componenti ===================== */
+function taskCard(t) {
+  const late = isLate(t), done = t.status === "done";
+  return `
+  <article class="card task ${late ? "is-late" : ""} ${done ? "is-done" : ""}" data-open="task" data-id="${esc(t.id)}">
+    <div class="task-top">
+      <div class="tags">
+        ${late ? `<span class="tag tag-danger">${ic("warning", "xs")} Scaduto</span>` : ""}
+        ${t.status === "doing" ? `<span class="tag tag-amber">In corso</span>` : ""}
+        ${t.due && !late ? `<span class="tag">${ic("event", "xs")} ${esc(fmtShort(t.due))}</span>` : ""}
+      </div>
+      <button type="button" class="check ${done ? "on" : ""}" data-act="toggle-done" aria-label="${done ? "Riapri compito" : "Segna come fatto"}" title="${done ? "Riapri" : "Segna come fatto"}">${ic("check", "sm")}</button>
+    </div>
+    <h3>${esc(t.title)}</h3>
+    ${t.notes ? `<p class="desc">${esc(t.notes)}</p>` : ""}
+    <div class="task-foot">
+      <span class="due ${late ? "late" : ""}">${ic(late ? "event_busy" : "event", "sm")} ${t.due ? `Scadenza: ${esc(fmtShort(t.due))}${late ? " (in ritardo)" : ""}` : "Senza scadenza"}</span>
+      ${pchip(t.owner)}
+    </div>
+  </article>`;
+}
+
+function docCard(d) {
+  const history = [...(d.history || [])].reverse();
+  const canConfirm = d.status === "bozza" || d.status === "da_confermare";
+  return `
+  <article class="card doc ${isUnseen(d) ? "is-new" : ""}" data-col="docs" data-id="${esc(d.id)}">
+    ${isUnseen(d) ? `<div class="newbar">${ic("fiber_new", "sm")}<span class="txt">${unseenText(d)}</span><button type="button" class="btn btn-light" data-act="seen">Visto</button></div>` : ""}
+    <div class="doc-top">
+      <span class="ver">v${d.version}</span>
+      <span class="tag ${DOC_TAG[d.status]}">${ic(d.status === "confermato" ? "check_circle" : d.status === "inviato" ? "send" : "fiber_manual_record", "xs")} ${DOC_STATUS[d.status]}</span>
+      <button type="button" class="icon-btn" data-act="edit-doc" aria-label="Modifica documento">${ic("more_vert")}</button>
+    </div>
+    <h3>${esc(d.title)}</h3>
+    <div class="byline">${avatar(d.owner, "xs")} <span>${esc(d.owner || "Nessun responsabile")}</span><span class="sep">•</span><span>da ${esc(firstName(d.updatedBy))}, ${esc(relTime(d.updatedAt))}</span></div>
+    ${d.link ? `<a class="file" href="${esc(d.link)}" target="_blank" rel="noopener noreferrer" data-seen>${ic("draft")}<span class="fname">${esc(fileName(d.link))}</span>${ic("open_in_new", "sm")}</a>` : ""}
+    <div class="two-btn">
+      ${canConfirm
+        ? `<button type="button" class="btn btn-green" data-act="confirm">${ic("verified")} Conferma</button>`
+        : d.status === "confermato"
+          ? `<button type="button" class="btn btn-light" data-act="sent">${ic("send")} Segna inviato</button>`
+          : `<button type="button" class="btn btn-light" data-act="reopen">${ic("undo")} Riapri</button>`}
+      <button type="button" class="btn btn-light" data-act="newver">${ic("add_circle")} Nuova versione</button>
+    </div>
+    <details class="timeline" ${d.status === "da_confermare" ? "open" : ""}>
+      <summary>${ic("history", "sm")} Cronologia versioni <span class="n">${history.length} ${history.length === 1 ? "revisione" : "revisioni"}</span></summary>
+      <ol>${history.map((h, i) => `
+        <li class="${i === 0 ? "current" : ""}">
+          <div class="tl-head"><b>v${h.version}${i === 0 ? " (attuale)" : ""}</b><span>${esc(relTime(h.at))}</span></div>
+          ${h.note ? `<p class="muted">${esc(h.note)}</p>` : ""}
+          <div class="tl-by">${avatar(h.by, "xs")} ${esc(h.by)}</div>
+        </li>`).join("")}</ol>
+    </details>
+  </article>`;
+}
+
+function eventCard(e) {
+  if (e.kind === "riunione") {
+    return `
+    <article class="ev meeting" data-open="event" data-id="${esc(e.id)}">
+      <div class="ev-top"><span class="time-pill">${ic("schedule", "sm")} ${esc(timeRange(e))}</span><span class="ev-tag">Riunione</span></div>
+      <h4>${esc(e.title)}</h4>
+      ${e.notes ? `<p class="notes">${ic("location_on", "sm")} ${esc(e.notes)}</p>` : ""}
+      <button type="button" class="addcal" data-act="add-cal">${ic("event_available", "sm")} Aggiungi al mio calendario</button>
+      <div class="ev-foot">${avatar(e.person, "xs")} <span>Organizza ${esc(e.person)}</span>${ic("chevron_right")}</div>
+    </article>`;
+  }
+  return `
+  <article class="ev away" style="--c:${colorOf(e.person)}" data-open="event" data-id="${esc(e.id)}">
+    <div class="ev-top"><span class="time-pill">${ic("schedule", "sm")} ${esc(timeRange(e))}</span><span class="ev-tag">Non disponibile</span></div>
+    <div class="who"><i class="dot"></i>${esc(e.person)}</div>
+    <h4>${esc(e.title)}</h4>
+    ${e.notes ? `<p class="notes">${esc(e.notes)}</p>` : ""}
+  </article>`;
+}
+
+/* ===================== OGGI ===================== */
+function renderOggi() {
+  const t = todayKey();
+  const now = new Date();
+  const days = Math.ceil((TOURNAMENT_START - new Date(now.getFullYear(), now.getMonth(), now.getDate())) / 86400000);
+  const mine = S.tasks.filter((x) => x.owner === S.me && x.status !== "done")
+    .sort((a, b) => isLate(b) - isLate(a) || (a.due || "9999").localeCompare(b.due || "9999"));
+  const waiting = S.docs.filter((d) => d.status === "da_confermare");
+  const unseen = S.docs.filter(isUnseen).sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || ""));
+  const limit = keyOf(addDays(now, 14));
+  const soon = S.events.filter((e) => e.date >= t && e.date <= limit);
+  const featured = soon.find((e) => e.kind === "riunione");
+  const others = soon.filter((e) => e !== featured);
+  const changes = [
+    ...S.tasks.map((x) => ({ ...x, col: "compiti" })),
+    ...S.docs.map((x) => ({ ...x, col: "documenti" })),
+    ...S.events.map((x) => ({ ...x, col: "calendario" })),
+    ...S.notes.map((x) => ({ ...x, col: "note" })),
+  ].filter((x) => x.updatedAt).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, 6);
+
+  const verb = (x) => {
+    if (x.col === "documenti" && x.version > 1 && x.createdAt !== x.updatedAt) return `ha aggiornato a v${x.version}`;
+    if (x.col === "compiti" && x.status === "done") return "ha completato";
+    return x.createdAt === x.updatedAt ? "ha creato" : "ha aggiornato";
+  };
+
+  $("#v-oggi").innerHTML = `
+    <div class="hero">
+      <span class="chip-soft">${ic("sports_tennis", "sm")} Torneo FIP Silver Alghero • Porto di Alghero</span>
+      <h1>Ciao ${esc(firstName(S.me))} 👋</h1>
+      <div class="hero-meta">
+        <span>${ic("today", "sm")} Oggi è ${esc(fmtLong(now))}</span>
+        ${days > 0 ? `<span>${ic("flag", "sm")} <b>Mancano ${days} giorni</b> al torneo</span>` : ""}
+      </div>
+    </div>
+    <div class="dash">
+      <section class="section">
+        <div class="section-head"><h2>I miei compiti aperti</h2><span class="pill">${mine.length} ${mine.length === 1 ? "attivo" : "attivi"}</span></div>
+        ${mine.length ? mine.slice(0, 4).map(taskCard).join("") : `<div class="empty">Nessun compito aperto a tuo nome.</div>`}
+        <button type="button" class="btn btn-light btn-block" data-go="compiti">Vedi tutti i compiti (${S.tasks.length}) ${ic("arrow_forward")}</button>
+      </section>
+
+      ${unseen.length ? `
+      <section class="section">
+        <div class="section-head"><h2 style="--h:#2563eb">Documenti aggiornati da vedere</h2><span class="tag tag-blue">${unseen.length} ${unseen.length === 1 ? "nuovo" : "nuovi"}</span></div>
+        ${unseen.slice(0, 4).map((d) => `
+          <article class="card doc-mini" data-col="docs" data-id="${esc(d.id)}">
+            <div class="row">
+              <span class="doc-icon">${ic("fiber_new")}</span>
+              <div style="min-width:0"><h3>${esc(d.title)}</h3><p class="muted" style="font-size:12px">${unseenText(d)}</p></div>
+            </div>
+            <div class="two-btn">
+              ${d.link ? `<a class="btn btn-light" href="${esc(d.link)}" target="_blank" rel="noopener noreferrer" data-seen>${ic("open_in_new")} Apri file</a>` : `<button type="button" class="btn btn-light" data-go="documenti">${ic("visibility")} Apri</button>`}
+              <button type="button" class="btn btn-light" data-act="seen">${ic("done_all")} Visto</button>
+            </div>
+          </article>`).join("")}
+        ${unseen.length > 4 ? `<button type="button" class="btn btn-light btn-block" data-go="documenti">Vedi tutti (${unseen.length}) ${ic("arrow_forward")}</button>` : ""}
+      </section>` : ""}
+
+      <section class="section">
+        <div class="section-head" style="--h:var(--danger)"><h2 style="--h:var(--danger)">Documenti da confermare</h2>${waiting.length ? `<span class="tag tag-danger-soft">${waiting.length} in attesa</span>` : ""}</div>
+        ${waiting.length ? waiting.map((d) => `
+          <article class="card doc-mini" data-col="docs" data-id="${esc(d.id)}">
+            <div class="row">
+              <span class="doc-icon">${ic("description")}</span>
+              <div style="min-width:0"><h3>${esc(d.title)}</h3><p class="muted" style="font-size:12px">Caricata da <b>${esc(d.updatedBy)}</b> • v${d.version}</p></div>
+            </div>
+            ${d.owner === S.me ? `<div class="notice">${ic("pending_actions", "sm")} Richiede la tua conferma</div>` : ""}
+            <div class="two-btn">
+              ${d.link ? `<a class="btn btn-light" href="${esc(d.link)}" target="_blank" rel="noopener noreferrer" data-seen>${ic("visibility")} Revisiona</a>` : `<button type="button" class="btn btn-light" data-go="documenti">${ic("visibility")} Apri</button>`}
+              <button type="button" class="btn btn-green" data-act="confirm">${ic("check_circle")} Conferma</button>
+            </div>
+          </article>`).join("") : `<div class="empty">Nessun documento in attesa di conferma.</div>`}
+      </section>
+
+      <section class="section">
+        <div class="section-head"><h2 style="--h:var(--indigo)">Prossimi impegni (14 giorni)</h2><button type="button" class="link-btn" data-go="calendario">Agenda ${ic("chevron_right", "sm")}</button></div>
+        ${featured ? `
+          <article class="meeting-hero" data-open="event" data-id="${esc(featured.id)}">
+            <div class="top"><span class="lbl">${ic("groups", "xs")} ${featured.date === t ? "Riunione stasera" : esc(cap(parseKey(featured.date).toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "short" })))}</span><span class="when">${esc(featured.start || "")}</span></div>
+            <h3>${esc(featured.title)}</h3>
+            ${featured.notes ? `<p class="sub">${ic("location_on", "xs")} ${esc(featured.notes)}</p>` : ""}
+            <button type="button" class="addcal" data-act="add-cal" style="margin:2px 0 10px">${ic("event_available", "sm")} Aggiungi al mio calendario</button>
+            <div class="foot"><span class="org">Organizza ${esc(featured.person)}</span><span class="avatars">${S.people.map((p) => avatar(p, "xs")).join("")}</span></div>
+          </article>` : ""}
+        ${others.slice(0, 5).map((e) => {
+          const d = parseKey(e.date);
+          const away = e.kind === "indisponibile";
+          return `
+          <article class="card agenda-row ${away ? "agenda-away" : ""}" style="--c:${colorOf(e.person)}" data-open="event" data-id="${esc(e.id)}">
+            <span class="datetile"><small>${esc(d.toLocaleDateString("it-IT", { weekday: "short" }).replace(".", ""))}</small><b>${d.getDate()}</b></span>
+            <div class="body">
+              <h4>${away ? `${esc(firstName(e.person))}: non disponibile` : esc(e.title)}</h4>
+              <div class="meta"><span>${ic("schedule", "xs")} ${esc(timeRange(e))}</span>${away ? `<span>${esc(e.title)}</span>` : `<span>${esc(e.person)}</span>`}</div>
+            </div>
+            ${ic("chevron_right", "faint")}
+          </article>`;
+        }).join("")}
+        ${!soon.length ? `<div class="empty">Nessun impegno nei prossimi 14 giorni.</div>` : ""}
+      </section>
+
+      <section class="section">
+        <div class="section-head"><h2 style="--h:var(--green)">Ultime modifiche</h2><span class="faint" style="font-size:12px;font-weight:600">Si aggiorna da sola</span></div>
+        <div class="card feed">
+          ${changes.length ? changes.map((x) => `
+            <div class="feed-row">
+              ${avatar(x.updatedBy, "sm")}
+              <div style="min-width:0">
+                <p><b>${esc(x.updatedBy)}</b> ${verb(x)} <em>${esc(x.title || (x.text || "").slice(0, 60) || "una nota")}</em></p>
+                <small>${ic("schedule", "xs")} ${esc(relTime(x.updatedAt))} • ${esc(cap(x.col))}</small>
+              </div>
+            </div>`).join("") : `<p class="muted">Ancora nessuna modifica.</p>`}
+        </div>
+      </section>
+    </div>`;
+}
+
+/* ===================== COMPITI ===================== */
+let peopleKey = "";
+function renderOwnerPicks() {
+  const key = S.people.join("|") + S.me;
+  if (key === peopleKey) return;
+  peopleKey = key;
+  $("#owner-picks").innerHTML = S.people.map((p) => `
+    <label class="pick" title="${esc(p)}"><input type="radio" name="owner" value="${esc(p)}" ${p === S.me ? "checked" : ""}>${avatar(p)}</label>`).join("");
+}
+function renderTasks() {
+  renderOwnerPicks();
+  const late = S.tasks.filter(isLate).length;
+  $("#task-total").textContent = S.tasks.length;
+  $("#task-stats").innerHTML = `<span><b>${S.tasks.length}</b> <span class="muted">totali</span></span>
+    ${late ? `<span class="tag tag-danger-soft">${ic("warning", "xs")} ${late} in ritardo</span>` : `<span class="tag tag-ok">${ic("check", "xs")} Nessun ritardo</span>`}`;
+  $$("#task-view-switch button").forEach((b) => b.classList.toggle("on", b.dataset.taskview === ui.taskView));
+
+  const sorted = [...S.tasks].sort((a, b) => isLate(b) - isLate(a) || (a.due || "9999").localeCompare(b.due || "9999"));
+  const groups = Object.keys(TASK_STATUS).map((s) => ({ s, items: sorted.filter((t) => t.status === s) }));
+
+  if (ui.taskView === "board") {
+    $("#col-switch").hidden = false;
+    $("#col-switch").innerHTML = groups.map((g) => `<button type="button" data-taskcol="${g.s}">${TASK_STATUS[g.s]} (${g.items.length})</button>`).join("");
+    $("#tasks-area").innerHTML = `<div class="board" id="board">${groups.map((g) => `
+      <div class="column" id="col-${g.s}">
+        <div class="col-head" style="--c:${TASK_COLOR[g.s]}"><i class="dot"></i>${TASK_STATUS[g.s]} <span class="n">${g.items.length}</span></div>
+        ${g.items.length ? g.items.map(taskCard).join("") : `<div class="empty">Nessun compito</div>`}
+      </div>`).join("")}</div>`;
+  } else {
+    $("#col-switch").hidden = true;
+    $("#tasks-area").innerHTML = S.tasks.length ? `<div class="card list-card">${sorted.map((t) => `
+      <div class="list-row" data-open="task" data-id="${esc(t.id)}">
+        <button type="button" class="check ${t.status === "done" ? "on" : ""}" data-act="toggle-done" aria-label="Segna come fatto">${ic("check", "sm")}</button>
+        <div class="body">
+          <h4 style="${t.status === "done" ? "text-decoration:line-through;color:var(--faint)" : ""}">${esc(t.title)}</h4>
+          <div class="meta">${pchip(t.owner)}<span style="${isLate(t) ? "color:var(--danger);font-weight:700" : ""}">${t.due ? ic("event", "xs") + " " + esc(fmtShort(t.due)) : "Senza scadenza"}</span><span class="tag ${t.status === "done" ? "tag-ok" : t.status === "doing" ? "tag-amber" : "tag-grey"}">${TASK_STATUS[t.status]}</span></div>
+        </div>
+        ${ic("chevron_right", "faint")}
+      </div>`).join("")}</div>` : `<div class="empty">Nessun compito. Aggiungine uno qui sopra.</div>`;
+  }
+}
+
+/* ===================== DOCUMENTI ===================== */
+function renderDocs() {
+  const q = ($("#doc-q").value || "").trim().toLowerCase();
+  const counts = { all: S.docs.length, nuovi: S.docs.filter(isUnseen).length };
+  for (const s of Object.keys(DOC_STATUS)) counts[s] = S.docs.filter((d) => d.status === s).length;
+  const filters = [["all", "Tutti"], ...(counts.nuovi || ui.docFilter === "nuovi" ? [["nuovi", "Da vedere"]] : []), ["da_confermare", "Da confermare"], ["bozza", "Bozze"], ["confermato", "Confermati"], ["inviato", "Inviati"]];
+  $("#doc-filters").innerHTML = filters.map(([k, label]) => `
+    <button type="button" class="chip ${ui.docFilter === k ? "on" : ""}" data-docfilter="${k}">
+      ${DOC_DOT[k] ? `<i class="dot" style="--c:${DOC_DOT[k]}"></i>` : k === "nuovi" ? `<i class="dot" style="--c:#2563eb"></i>` : ""}${label} <span class="count">${counts[k]}</span>
+    </button>`).join("");
+  const order = { da_confermare: 0, bozza: 1, confermato: 2, inviato: 3 };
+  const list = S.docs
+    .filter((d) => ui.docFilter === "all" || (ui.docFilter === "nuovi" ? isUnseen(d) : d.status === ui.docFilter))
+    .filter((d) => !q || `${d.title} ${d.owner} ${d.link}`.toLowerCase().includes(q))
+    .sort((a, b) => isUnseen(b) - isUnseen(a) || order[a.status] - order[b.status] || (b.updatedAt || "").localeCompare(a.updatedAt || ""));
+  $("#l-docs").innerHTML = list.length ? list.map(docCard).join("")
+    : `<div class="empty">${S.docs.length ? "Nessun documento corrisponde alla ricerca." : "Nessun documento. Usa il pulsante in alto per aggiungerne uno."}</div>`;
+}
+
+/* ===================== CALENDARIO ===================== */
+function visibleEvents() {
+  return S.events.filter((e) => ui.calFilter === "all" || (ui.calFilter === "riunioni" ? e.kind === "riunione" : e.person === ui.calFilter));
+}
+function renderCalendar() {
+  const d = ui.calDate;
+  const evs = visibleEvents();
+  const byDay = {};
+  for (const e of evs) (byDay[e.date] ||= []).push(e);
+  for (const k in byDay) byDay[k].sort((a, b) => (a.start || "").localeCompare(b.start || ""));
+
+  $("#cal-mode").innerHTML = `
+    <button type="button" data-calmode="week" class="${ui.calMode === "week" ? "on" : ""}">${ic("view_week")} Settimana</button>
+    <button type="button" data-calmode="month" class="${ui.calMode === "month" ? "on" : ""}">${ic("calendar_view_month")} Mese</button>`;
+
+  const ws = weekStart(d), we = addDays(ws, 6);
+  const month = new Date(d.getFullYear(), d.getMonth(), 1);
+  const gridStart = weekStart(month);
+  const cells = [];
+  for (let c = new Date(gridStart); cells.length < 42; c = addDays(c, 1)) {
+    cells.push(new Date(c));
+    if (cells.length % 7 === 0 && addDays(c, 1).getMonth() !== d.getMonth() && cells.length >= 28) break;
+  }
+  const t = todayKey(), sel = keyOf(d);
+  const big = ui.calMode === "month";
+  const range = `${ws.getDate()} ${ws.toLocaleDateString("it-IT", { month: "short" })} – ${we.getDate()} ${we.toLocaleDateString("it-IT", { month: "short" })}`;
+  const colorFor = (e) => e.kind === "riunione" ? MEETING_COLOR : colorOf(e.person);
+
+  $("#cal-card").innerHTML = `
+    <div class="cal-head">
+      <div><h2>${ic("calendar_month")} ${esc(cap(month.toLocaleDateString("it-IT", { month: "long", year: "numeric" })))}</h2>
+        <p>${big ? `${evs.filter((e) => e.date.startsWith(keyOf(month).slice(0, 7))).length} impegni nel mese` : `Settimana ${isoWeek(d)} • ${esc(range)}`}</p></div>
+      <div class="cal-nav">
+        <button type="button" data-calnav="-1" aria-label="${big ? "Mese precedente" : "Settimana precedente"}">${ic("chevron_left")}</button>
+        <button type="button" data-calnav="0">Oggi</button>
+        <button type="button" data-calnav="1" aria-label="${big ? "Mese successivo" : "Settimana successiva"}">${ic("chevron_right")}</button>
+      </div>
+    </div>
+    <div class="mgrid ${big ? "big" : ""}">
+      ${["L", "M", "M", "G", "V", "S", "D"].map((w) => `<div class="wd">${w}</div>`).join("")}
+      ${cells.map((c) => {
+        const k = keyOf(c), list = byDay[k] || [];
+        const cls = [c.getMonth() !== d.getMonth() ? "out" : "", k === t ? "today" : "", !big && c >= ws && c <= we ? "inweek" : "", big && k === sel ? "sel" : ""].join(" ");
+        const marks = big
+          ? `<div class="bars">${list.slice(0, 3).map((e) => `<span class="${e.kind === "riunione" ? "" : "away"}" style="--c:${colorFor(e)}">${e.kind === "riunione" ? "Riunione" : esc(initials(e.person))}</span>`).join("")}${list.length > 3 ? `<span class="more">+${list.length - 3}</span>` : ""}</div>`
+          : `<div class="dots">${list.slice(0, 4).map((e) => `<i style="--c:${colorFor(e)}"></i>`).join("")}</div>`;
+        return `<button type="button" class="day ${cls}" data-day="${k}" aria-label="${esc(fmtLong(c))}, ${list.length} impegni"><span class="num">${c.getDate()}</span>${marks}</button>`;
+      }).join("")}
+    </div>`;
+
+  $("#cal-filters").innerHTML = [
+    `<button type="button" class="chip ${ui.calFilter === "all" ? "on" : ""}" data-calfilter="all">${ic("groups", "sm")} Tutti</button>`,
+    `<button type="button" class="chip ${ui.calFilter === "riunioni" ? "on" : ""}" data-calfilter="riunioni"><i class="dot" style="--c:${MEETING_COLOR}"></i> Riunioni</button>`,
+    ...S.people.map((p) => `<button type="button" class="chip ${ui.calFilter === p ? "on" : ""}" data-calfilter="${esc(p)}"><i class="dot" style="--c:${colorOf(p)}"></i> ${esc(shortName(p))}</button>`),
+  ].join("");
+
+  let days;
+  if (big) {
+    const prefix = keyOf(month).slice(0, 7);
+    days = Object.keys(byDay).filter((k) => k.startsWith(prefix)).sort().map(parseKey);
+  } else {
+    days = Array.from({ length: 7 }, (_, i) => addDays(ws, i));
+  }
+  const html = days.map((day) => {
+    const k = keyOf(day), list = byDay[k] || [];
+    const meetings = list.filter((e) => e.kind === "riunione").length;
+    const away = list.length - meetings;
+    const summary = list.length ? [meetings && `${meetings} ${meetings === 1 ? "riunione" : "riunioni"}`, away && `${away} ${away === 1 ? "indisponibilità" : "indisponibilità"}`].filter(Boolean).join(" • ") : "Tutti disponibili";
+    return `
+      <div class="day-group" id="day-${k}">
+        <div class="day-head"><span class="dn ${k === t ? "today" : ""}">${day.getDate()}</span><div><h3>${esc(fmtLong(day))}</h3><p>${summary}</p></div></div>
+        ${list.map(eventCard).join("")}
+      </div>`;
+  }).join("");
+  $("#cal-list").innerHTML = html || `<div class="empty">Nessun impegno in questo mese.</div>`;
+}
+
+/* ===================== NOTE ===================== */
+function renderNotes() {
+  const q = ($("#note-q").value || "").trim().toLowerCase();
+  $("#note-count").textContent = S.notes.length;
+  const authors = [...new Set([...S.people, ...S.notes.map((n) => n.createdBy)])].filter(Boolean);
+  $("#note-filters").innerHTML = [
+    `<button type="button" class="chip ${ui.noteFilter === "all" ? "on" : ""}" data-notefilter="all">${ic("groups", "sm")} Tutti <span class="count">${S.notes.length}</span></button>`,
+    ...authors.map((p) => `<button type="button" class="chip ${ui.noteFilter === p ? "on" : ""}" data-notefilter="${esc(p)}"><i class="dot" style="--c:${colorOf(p)}"></i> ${esc(shortName(p))}</button>`),
+  ].join("");
+  const list = S.notes
+    .filter((n) => ui.noteFilter === "all" || n.createdBy === ui.noteFilter)
+    .filter((n) => !q || `${n.title} ${n.text}`.toLowerCase().includes(q));
+  $("#l-notes").innerHTML = list.length ? list.map((n) => `
+    <article class="card note" data-id="${esc(n.id)}">
+      <div class="note-top">
+        <span class="doc-icon" style="width:32px;height:32px;border-radius:8px">${ic("sticky_note_2", "sm")}</span>
+        ${n.updatedAt !== n.createdAt ? `<span class="tag tag-grey">Modificata</span>` : ""}
+        <button type="button" class="icon-btn" data-act="edit-note" aria-label="Modifica nota">${ic("more_vert")}</button>
+      </div>
+      ${n.title ? `<h3>${esc(n.title)}</h3>` : ""}
+      <div class="text">${esc(n.text)}</div>
+      <div class="note-foot">
+        <span class="who">${avatar(n.createdBy, "xs")} ${esc(n.createdBy)}</span>
+        <span class="when">${ic("calendar_today", "xs")} ${esc(new Date(n.createdAt).toLocaleDateString("it-IT", { day: "numeric", month: "short", year: "numeric" }))}</span>
+      </div>
+    </article>`).join("")
+    : `<div class="empty">${S.notes.length ? "Nessuna nota corrisponde alla ricerca." : "Nessuna nota. Usa \"Nuova nota\" per scrivere la prima."}</div>`;
+}
 
 function renderAll() {
-  $("#who").textContent = "Accesso come " + S.me;
-  $$("select[data-people]").forEach((sel) => {
-    const prev = sel.value || S.me;
-    sel.innerHTML = options(S.people, S.people.includes(prev) ? prev : S.me, {});
-  });
-  renderToday();
+  $("#me-avatar").innerHTML = avatar(S.me, "sm");
+  $("#admin-btn").hidden = !S.isAdmin;
+  renderNav();
+  renderOggi();
   renderTasks();
   renderDocs();
-  renderEvents();
+  renderCalendar();
   renderNotes();
 }
 
-function renderToday() {
-  const t = today();
-  const myTasks = S.tasks.filter((x) => x.owner === S.me && x.status !== "done");
-  $("#o-tasks").innerHTML = myTasks.length
-    ? myTasks.map((x) => `<div class="item"><div class="body"><strong>${esc(x.title)}</strong><div class="meta">${x.due ? "entro " + fmtDate(x.due) : "senza scadenza"}</div></div>${pill(x.status)}</div>`).join("")
-    : `<p class="empty">Nessun compito aperto a tuo nome.</p>`;
+/* ===================== pannello di modifica ===================== */
+let sheetHandler = null;
+const fieldInput = (label, name, value = "", attrs = "", full = true) =>
+  `<label class="field ${full ? "full" : ""}"><span>${label}</span><input name="${name}" value="${esc(value)}" ${attrs}></label>`;
+const fieldSelect = (label, name, values, selected, labels = {}, full = true) =>
+  `<label class="field ${full ? "full" : ""}"><span>${label}</span><select name="${name}">${options(values, selected, labels)}</select></label>`;
+const fieldText = (label, name, value = "", attrs = "") =>
+  `<label class="field full"><span>${label}</span><textarea name="${name}" ${attrs}>${esc(value)}</textarea></label>`;
 
-  const waiting = S.docs.filter((x) => x.status === "da_confermare");
-  $("#o-docs").innerHTML = waiting.length
-    ? waiting.map((x) => `<div class="item"><div class="body"><strong>${esc(x.title)}</strong><div class="meta">v${x.version} · ${esc(x.owner || "nessun responsabile")}</div></div>${pill(x.status)}</div>`).join("")
-    : `<p class="empty">Nessun documento in attesa di conferma.</p>`;
-
-  const limit = new Date(); limit.setDate(limit.getDate() + 14);
-  const limitKey = limit.toISOString().slice(0, 10);
-  const soon = S.events.filter((e) => e.date >= t && e.date <= limitKey);
-  $("#o-events").innerHTML = soon.length
-    ? soon.map((e) => `<div class="item"><div class="body"><strong>${esc(e.title)}</strong><div class="meta">${fmtDate(e.date)}${e.start ? " · " + esc(e.start) + (e.end ? "–" + esc(e.end) : "") : ""} · ${esc(e.person)}</div></div>${pill(e.kind)}</div>`).join("")
-    : `<p class="empty">Nessun impegno nei prossimi 14 giorni.</p>`;
-
-  const changes = [
-    ...S.tasks.map((x) => ({ ...x, col: "tasks" })),
-    ...S.docs.map((x) => ({ ...x, col: "docs" })),
-    ...S.events.map((x) => ({ ...x, col: "events" })),
-    ...S.notes.map((x) => ({ ...x, col: "notes" })),
-  ].filter((x) => x.updatedAt).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, 8);
-  $("#o-changes").innerHTML = changes.length
-    ? changes.map((x) => `<div class="item"><div class="body"><strong>${esc(x.title || x.text?.slice(0, 60) || "Nota")}</strong><div class="meta">${esc(x.updatedBy)} · ${esc(COLLECTION_NAME[x.col])} · ${fmtWhen(x.updatedAt)}</div></div></div>`).join("")
-    : `<p class="empty">Ancora nessuna modifica.</p>`;
-}
-
-function renderTasks() {
-  const list = [...S.tasks].sort((a, b) =>
-    (a.status === "done") - (b.status === "done") || (a.due || "9999").localeCompare(b.due || "9999"));
-  $("#l-tasks").innerHTML = list.length ? list.map((x) => `
-    <div class="item" data-col="tasks" data-id="${esc(x.id)}">
-      <div class="body"><strong>${esc(x.title)}</strong>
-        <div class="meta">${esc(x.owner || "nessun responsabile")}${x.due ? " · entro " + fmtDate(x.due) : ""} · aggiornato da ${esc(x.updatedBy)}</div>
-        ${x.notes ? `<div class="meta">${esc(x.notes)}</div>` : ""}
-      </div>
-      <div class="actions">
-        <select data-field="owner" aria-label="Responsabile">${options(S.people, x.owner)}</select>
-        <select data-field="status" aria-label="Stato">${options(["todo", "doing", "done"], x.status)}</select>
-        <button class="ghost danger" data-act="del" type="button">Elimina</button>
-      </div>
-    </div>`).join("") : `<p class="empty">Nessun compito. Aggiungine uno sopra.</p>`;
-}
-
-function renderDocs() {
-  $("#l-docs").innerHTML = S.docs.length ? S.docs.map((x) => `
-    <div class="item" data-col="docs" data-id="${esc(x.id)}" style="display:block">
-      <div style="display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:space-between;align-items:center">
-        <div class="body"><strong>${esc(x.title)}</strong>
-          <div class="meta">Versione ${x.version} · ${esc(x.owner || "nessun responsabile")} · aggiornato da ${esc(x.updatedBy)} ${fmtWhen(x.updatedAt)}</div>
-          ${x.link ? `<div class="meta"><a href="${esc(x.link)}" target="_blank" rel="noopener noreferrer">Apri il file</a></div>` : ""}
-        </div>
-        <div class="actions">
-          ${pill(x.status)}
-          <select data-field="owner" aria-label="Responsabile">${options(S.people, x.owner)}</select>
-          <select data-field="status" aria-label="Stato">${options(["bozza", "da_confermare", "confermato", "inviato"], x.status)}</select>
-          <button type="button" data-act="newver">Nuova versione</button>
-          <button class="ghost danger" data-act="del" type="button">Elimina</button>
-        </div>
-      </div>
-      <details>
-        <summary>Storico versioni (${(x.history || []).length})</summary>
-        <ul class="history">${[...(x.history || [])].reverse().map((h) => `<li>v${h.version} · ${esc(h.by)} · ${fmtWhen(h.at)} — ${esc(h.note || "")}</li>`).join("")}</ul>
-      </details>
-    </div>`).join("") : `<p class="empty">Nessun documento. Aggiungine uno sopra.</p>`;
-}
-
-function renderEvents() {
-  const t = today();
-  const list = S.events.filter((e) => e.date >= t);
-  let html = "", lastDay = "";
-  for (const e of list) {
-    if (e.date !== lastDay) { html += `<div class="day">${fmtDate(e.date)}</div>`; lastDay = e.date; }
-    html += `
-    <div class="item" data-col="events" data-id="${esc(e.id)}">
-      <div class="body"><strong>${esc(e.title)}</strong>
-        <div class="meta">${esc(e.person)}${e.start ? " · " + esc(e.start) + (e.end ? "–" + esc(e.end) : "") : " · tutto il giorno"}</div>
-      </div>
-      <div class="actions">
-        ${pill(e.kind)}
-        <button class="ghost danger" data-act="del" type="button">Elimina</button>
-      </div>
-    </div>`;
+function openSheet({ title, body, submit = "Salva", danger = null, onSubmit }) {
+  $("#sheet-title").textContent = title;
+  $("#sheet-body").innerHTML = body;
+  $("#sheet-submit").textContent = submit || "";
+  $("#sheet-submit").hidden = !submit;
+  $("#sheet-form footer [data-close]").textContent = submit ? "Annulla" : "Chiudi";
+  $("#sheet-err").textContent = "";
+  const del = $("#sheet-danger");
+  del.hidden = !danger;
+  del.onclick = null;
+  if (danger) {
+    del.textContent = danger.label;
+    del.dataset.armed = "";
+    del.onclick = async () => {
+      if (!del.dataset.armed) { del.dataset.armed = "1"; del.textContent = "Conferma eliminazione"; return; }
+      try { await danger.run(); closeSheet(); toast(danger.done || "Eliminato"); }
+      catch (err) { $("#sheet-err").textContent = err.message; }
+    };
   }
-  $("#l-events").innerHTML = html || `<p class="empty">Nessun impegno in programma.</p>`;
+  sheetHandler = onSubmit;
+  $("#sheet").hidden = false;
+  document.body.classList.add("no-scroll");
+  setTimeout(() => $("#sheet-body input, #sheet-body textarea, #sheet-body select")?.focus(), 60);
+}
+function closeSheet() {
+  $("#sheet").hidden = true;
+  document.body.classList.remove("no-scroll");
+  sheetHandler = null;
+}
+const peopleOr = (name) => S.people.includes(name) || !name ? S.people : [name, ...S.people];
+
+function openTask(id) {
+  const t = S.tasks.find((x) => x.id === id);
+  if (!t) return;
+  openSheet({
+    title: "Compito",
+    body: fieldInput("Titolo", "title", t.title, 'required maxlength="200"') +
+      fieldSelect("Responsabile", "owner", peopleOr(t.owner), t.owner, {}, false) +
+      fieldSelect("Stato", "status", Object.keys(TASK_STATUS), t.status, TASK_STATUS, false) +
+      fieldInput("Scadenza", "due", t.due, 'type="date"', false) +
+      fieldText("Note e dettagli", "notes", t.notes, 'maxlength="2000" placeholder="Cosa serve, a chi rivolgersi, dove sono i file..."') +
+      `<p class="hint">Creato da ${esc(t.createdBy)} • ultima modifica di ${esc(t.updatedBy)}, ${esc(relTime(t.updatedAt))}</p>`,
+    danger: { label: "Elimina", run: () => deleteItem("tasks", id), done: "Compito eliminato" },
+    onSubmit: (data) => patchItem("tasks", id, data),
+  });
+}
+function openDocForm(id) {
+  const d = id ? S.docs.find((x) => x.id === id) : null;
+  openSheet({
+    title: d ? "Modifica documento" : "Nuovo documento",
+    submit: d ? "Salva" : "Aggiungi",
+    body: fieldInput("Nome del documento", "title", d?.title, 'required maxlength="200" placeholder="Es. Lettera al Prefetto"') +
+      fieldSelect("Responsabile", "owner", peopleOr(d?.owner), d?.owner || S.me, {}, !!d ? false : true) +
+      (d ? fieldSelect("Stato", "status", Object.keys(DOC_STATUS), d.status, DOC_STATUS, false) : "") +
+      fieldInput("Link al file (OneDrive o Drive)", "link", d?.link, 'type="url" placeholder="https://"') +
+      `<p class="hint">Il file resta su OneDrive: qui tieni versione, stato e chi deve confermare.</p>`,
+    danger: d ? { label: "Elimina", run: () => deleteItem("docs", id), done: "Documento eliminato" } : null,
+    onSubmit: (data) => d
+      ? patchItem("docs", id, data)
+      : saveItem("docs", { ...data, version: 1, status: "bozza", history: [{ version: 1, by: S.me, at: new Date().toISOString(), note: "Prima versione" }] }),
+  });
+}
+function openNewVersion(id) {
+  const d = S.docs.find((x) => x.id === id);
+  if (!d) return;
+  openSheet({
+    title: `Nuova versione: v${d.version + 1}`,
+    submit: "Salva versione",
+    body: `<p class="hint" style="margin:0">${esc(d.title)}</p>` +
+      fieldText("Cosa cambia in questa versione", "note", "", 'required maxlength="500" placeholder="Es. Aggiornati gli orari delle semifinali"') +
+      fieldInput("Link al file aggiornato", "link", d.link, 'type="url" placeholder="https://"') +
+      `<p class="hint">Il documento torna "Da confermare" finché qualcuno non lo conferma.</p>`,
+    onSubmit: ({ note, link }) => {
+      const version = d.version + 1;
+      return patchItem("docs", id, {
+        version, link, status: "da_confermare",
+        history: [...(d.history || []), { version, by: S.me, at: new Date().toISOString(), note: note.trim() }],
+      });
+    },
+  });
+}
+function openEventForm(id, date) {
+  const e = id ? S.events.find((x) => x.id === id) : null;
+  openSheet({
+    title: e ? "Impegno" : "Nuovo impegno",
+    submit: e ? "Salva" : "Aggiungi",
+    body: fieldSelect("Tipo", "kind", Object.keys(KIND), e?.kind || "indisponibile", KIND, false) +
+      fieldSelect("Persona", "person", peopleOr(e?.person), e?.person || S.me, {}, false) +
+      fieldInput("Titolo", "title", e?.title, 'required maxlength="200" placeholder="Es. Lavoro in ufficio / Riunione organizzatori"') +
+      fieldInput("Giorno", "date", e?.date || date || todayKey(), 'type="date" required') +
+      fieldInput("Dalle", "start", e?.start, 'type="time"', false) +
+      fieldInput("Alle", "end", e?.end, 'type="time"', false) +
+      fieldText("Luogo o note", "notes", e?.notes, 'maxlength="2000" style="min-height:64px" placeholder="Es. Banchina Dogana, oppure link della videochiamata"') +
+      `<p class="hint">Senza orario vale per tutto il giorno. Per le riunioni, "Persona" è chi le organizza.</p>`,
+    danger: e ? { label: "Elimina", run: () => deleteItem("events", id), done: "Impegno eliminato" } : null,
+    onSubmit: (data) => {
+      if (data.start && data.end && data.end <= data.start) throw new Error("L'orario di fine deve essere dopo l'inizio.");
+      return e ? patchItem("events", id, data) : saveItem("events", data);
+    },
+  });
+}
+function openNoteForm(id) {
+  const n = id ? S.notes.find((x) => x.id === id) : null;
+  openSheet({
+    title: n ? "Modifica nota" : "Nuova nota",
+    submit: n ? "Salva" : "Pubblica",
+    body: fieldInput("Titolo (facoltativo)", "title", n?.title, 'maxlength="200" placeholder="Es. Contatti fornitore generatori"') +
+      fieldText("Testo", "text", n?.text, 'required maxlength="2000" style="min-height:160px"'),
+    danger: n ? { label: "Elimina", run: () => deleteItem("notes", id), done: "Nota eliminata" } : null,
+    onSubmit: (data) => n ? patchItem("notes", id, data) : saveItem("notes", data),
+  });
 }
 
-function renderNotes() {
-  $("#l-notes").innerHTML = S.notes.length ? S.notes.map((x) => `
-    <div class="item" data-col="notes" data-id="${esc(x.id)}" style="display:block">
-      ${x.title ? `<strong>${esc(x.title)}</strong>` : ""}
-      <div style="white-space:pre-wrap;overflow-wrap:anywhere;margin-top:4px">${esc(x.text)}</div>
-      <div class="meta" style="margin-top:6px">${esc(x.createdBy)} · ${fmtWhen(x.createdAt)}
-        <button class="ghost danger" data-act="del" type="button" style="margin-left:8px">Elimina</button></div>
-    </div>`).join("") : `<p class="empty">Nessuna nota.</p>`;
+/* ===================== riunioni nel calendario personale ===================== */
+const TZ = "Europe/Rome";
+// Scarto di Roma rispetto a UTC in quel giorno e ora, es. "+02:00".
+function romeOffset(date, time) {
+  const guess = new Date(`${date}T${time}:00Z`);
+  const p = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(guess).map((x) => [x.type, x.value]));
+  const min = Math.round((Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute) - guess) / 60000);
+  return `${min < 0 ? "-" : "+"}${pad(Math.floor(Math.abs(min) / 60))}:${pad(Math.abs(min) % 60)}`;
+}
+function meetingTimes(e) {
+  if (!e.start) return { allDay: true, date: e.date, next: keyOf(addDays(parseKey(e.date), 1)) };
+  let end = e.end && e.end > e.start ? e.end : null;
+  if (!end) { const [h, m] = e.start.split(":").map(Number); end = h >= 23 ? "23:59" : `${pad(h + 1)}:${pad(m)}`; }
+  return { allDay: false, date: e.date, start: e.start, end };
+}
+const meetingText = (e) => [e.notes, `Organizza ${e.person}`, "Dall'app di coordinamento FIP Silver Alghero 2027"].filter(Boolean).join("\n");
+function googleLink(e) {
+  const t = meetingTimes(e), c = (d) => d.replace(/-/g, "");
+  const dates = t.allDay ? `${c(t.date)}/${c(t.next)}` : `${c(t.date)}T${t.start.replace(":", "")}00/${c(t.date)}T${t.end.replace(":", "")}00`;
+  const q = new URLSearchParams({ action: "TEMPLATE", text: e.title, dates, ctz: TZ, details: meetingText(e) });
+  if (e.notes) q.set("location", e.notes.split("\n")[0]);
+  return "https://calendar.google.com/calendar/render?" + q;
+}
+function outlookLink(e) {
+  const t = meetingTimes(e);
+  const q = new URLSearchParams({ subject: e.title, body: meetingText(e), path: "/calendar/action/compose", rru: "addevent" });
+  if (t.allDay) { q.set("startdt", t.date); q.set("enddt", t.next); q.set("allday", "true"); }
+  else { q.set("startdt", `${t.date}T${t.start}:00${romeOffset(t.date, t.start)}`); q.set("enddt", `${t.date}T${t.end}:00${romeOffset(t.date, t.end)}`); }
+  if (e.notes) q.set("location", e.notes.split("\n")[0]);
+  return "https://outlook.office.com/calendar/0/deeplink/compose?" + q;
+}
+function icsFile(e) {
+  const t = meetingTimes(e), c = (d) => d.replace(/-/g, "");
+  const txt = (s) => String(s || "").replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
+  const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+/, "");
+  const lines = [
+    "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//FIP Silver Alghero 2027//Coordinamento//IT", "METHOD:PUBLISH",
+    "BEGIN:VTIMEZONE", "TZID:Europe/Rome",
+    "BEGIN:DAYLIGHT", "TZOFFSETFROM:+0100", "TZOFFSETTO:+0200", "TZNAME:CEST", "DTSTART:19700329T020000", "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU", "END:DAYLIGHT",
+    "BEGIN:STANDARD", "TZOFFSETFROM:+0200", "TZOFFSETTO:+0100", "TZNAME:CET", "DTSTART:19701025T030000", "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU", "END:STANDARD",
+    "END:VTIMEZONE",
+    "BEGIN:VEVENT", `UID:${e.id}@fip-silver-coordinamento`, `DTSTAMP:${stamp}`,
+    ...(t.allDay
+      ? [`DTSTART;VALUE=DATE:${c(t.date)}`, `DTEND;VALUE=DATE:${c(t.next)}`]
+      : [`DTSTART;TZID=${TZ}:${c(t.date)}T${t.start.replace(":", "")}00`, `DTEND;TZID=${TZ}:${c(t.date)}T${t.end.replace(":", "")}00`]),
+    `SUMMARY:${txt(e.title)}`, `DESCRIPTION:${txt(meetingText(e))}`,
+    ...(e.notes ? [`LOCATION:${txt(e.notes.split("\n")[0])}`] : []),
+    "END:VEVENT", "END:VCALENDAR",
+  ];
+  return lines.join("\r\n") + "\r\n";
+}
+function downloadIcs(e) {
+  const url = URL.createObjectURL(new Blob([icsFile(e)], { type: "text/calendar;charset=utf-8" }));
+  const a = Object.assign(document.createElement("a"), { href: url, download: `riunione-${e.date}.ics` });
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
+function openAddToCalendar(id) {
+  const e = S.events.find((x) => x.id === id);
+  if (!e) return;
+  openSheet({
+    title: "Aggiungi al tuo calendario",
+    submit: null,
+    body: `
+      <p class="hint" style="margin:0;grid-column:1/-1"><b>${esc(e.title)}</b><br>${esc(fmtLong(parseKey(e.date)))}${e.start ? `, ${esc(timeRange(e))}` : ""}</p>
+      <div class="cal-links" data-id="${esc(e.id)}">
+        <a class="btn btn-light" href="${esc(googleLink(e))}" target="_blank" rel="noopener noreferrer" data-calpick>${ic("calendar_month")} Google Calendar</a>
+        <a class="btn btn-light" href="${esc(outlookLink(e))}" target="_blank" rel="noopener noreferrer" data-calpick>${ic("mail")} Outlook (Microsoft 365)</a>
+        <button type="button" class="btn btn-light" data-act="ics">${ic("phone_iphone")} iPhone, Mac o altro calendario</button>
+      </div>
+      <p class="hint" style="grid-column:1/-1">Se la riunione cambia orario, aggiungila di nuovo dall'app e cancella quella vecchia dal tuo calendario.</p>`,
+  });
 }
 
-/* ---------- actions ---------- */
+/* ===================== account (solo amministratore) ===================== */
+const KEEP_OPEN = Symbol("keep-open");
+const ROLE = { membro: "Organizzatore", admin: "Amministratore", servizio: "Servizio (accesso per Claude)" };
+let adminUsers = [];
+function adminBody(shown) {
+  const order = { admin: 0, membro: 1, servizio: 2 };
+  const users = [...adminUsers].sort((a, b) => order[a.role] - order[b.role] || a.name.localeCompare(b.name));
+  return `
+    ${shown ? `
+      <div class="admin-block">
+        <p class="hint" style="margin:0 0 6px">Codice di <b>${esc(shown.name)}</b>: copialo ora e mandalo solo a questa persona. Non verrà più mostrato.</p>
+        <div class="codebox"><code>${esc(shown.code)}</code><button type="button" class="btn btn-light" data-act="copy-code" data-code="${esc(shown.code)}">${ic("content_copy", "sm")} Copia</button></div>
+      </div>` : ""}
+    <div class="admin-block">${users.map((u) => `
+      <div class="user-row" data-id="${esc(u.id)}">
+        ${avatar(u.name, "sm")}
+        <div class="info"><b>${esc(u.name)}${u.name === S.me ? " (tu)" : ""}</b><small>${esc(ROLE[u.role] || u.role)}</small></div>
+        <button type="button" class="icon-btn" data-act="user-code" title="Genera un nuovo codice" aria-label="Nuovo codice per ${esc(u.name)}">${ic("key")}</button>
+        ${u.name === S.me ? "" : `<button type="button" class="icon-btn" data-act="user-del" title="Elimina account" aria-label="Elimina ${esc(u.name)}">${ic("person_remove")}</button>`}
+      </div>`).join("")}</div>
+    <h3 class="sheet-sub">Aggiungi una persona</h3>
+    ${fieldInput("Nome e cognome", "name", "", 'required maxlength="80" placeholder="Es. Mario Rossi" autocomplete="off"')}
+    ${fieldSelect("Tipo di account", "role", Object.keys(ROLE), "membro", ROLE)}
+    <p class="hint">Con un nuovo codice quello vecchio smette di funzionare. Chi viene eliminato non entra più, ma compiti e documenti a suo nome restano.</p>`;
+}
+const showAdmin = (shown) => { $("#sheet-body").innerHTML = adminBody(shown); $("#sheet-err").textContent = ""; };
+async function openAdmin() {
+  const { users } = await api("users");
+  adminUsers = users;
+  openSheet({
+    title: "Account del team",
+    submit: "Crea account",
+    body: adminBody(),
+    onSubmit: async ({ name, role }) => {
+      const res = await api("users", { method: "POST", body: { name, role } });
+      adminUsers.push(res.user);
+      showAdmin({ name: res.user.name, code: res.code });
+      refresh().catch(() => {});
+      return KEEP_OPEN;
+    },
+  });
+}
+async function userAction(act, id, button) {
+  const u = adminUsers.find((x) => x.id === id);
+  if (!u) return;
+  if (act === "user-code") {
+    const res = await api(`users/code?id=${encodeURIComponent(id)}`, { method: "POST" });
+    if (u.name === S.me) { code = res.code; store.set("fip-code", code); }
+    return showAdmin({ name: u.name, code: res.code });
+  }
+  if (act === "user-del") {
+    if (!button.classList.contains("armed")) { button.classList.add("armed"); button.textContent = "Elimina?"; return; }
+    await api(`users?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+    adminUsers = adminUsers.filter((x) => x.id !== id);
+    showAdmin();
+    toast(`${u.name} eliminato`);
+    return refresh();
+  }
+}
 
+/* ===================== assistente ===================== */
+const chatHistory = [];
+function mdLite(text) {
+  let html = "", inList = false;
+  for (const raw of esc(text).split("\n")) {
+    const line = raw.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/(^|\s)\*(\S.*?)\*(?=\s|$|[.,;:!?])/g, "$1<em>$2</em>");
+    const item = line.match(/^\s*(?:[-*•]|\d+[.)])\s+(.*)/);
+    if (item) { if (!inList) { html += "<ul>"; inList = true; } html += `<li>${item[1]}</li>`; continue; }
+    if (inList) { html += "</ul>"; inList = false; }
+    if (line.trim()) html += `<p>${line}</p>`;
+  }
+  return html + (inList ? "</ul>" : "");
+}
+function addMessage(role, text) {
+  const wrap = document.createElement("div");
+  wrap.className = "msg " + (role === "user" ? "user" : "ai");
+  const time = hhmm(new Date());
+  wrap.innerHTML = role === "user"
+    ? `${avatar(S.me, "sm")}<div class="stack"><div class="bubble"></div><span class="time">${time} • Tu</span></div>`
+    : `<span class="ai-avatar">${ic("auto_awesome", "sm")}</span><div class="stack"><div class="bubble"><div class="who">ASSISTENTE AI</div><div class="content"></div></div><span class="time">${time} • AI</span></div>`;
+  if (role === "user") $(".bubble", wrap).textContent = text;
+  else if (text === null) $(".content", wrap).innerHTML = `<span class="typing"><i></i><i></i><i></i></span>`;
+  else $(".content", wrap).innerHTML = mdLite(text);
+  $("#chat").appendChild(wrap);
+  wrap.scrollIntoView({ block: "end", behavior: "smooth" });
+  return wrap;
+}
+async function askAssistant(question) {
+  if (!question) return;
+  if (ui.tab !== "assistente") showTab("assistente");
+  $("#chat-err").textContent = "";
+  addMessage("user", question);
+  const pending = addMessage("ai", null);
+  try {
+    const { answer } = await api("ai", { method: "POST", body: { question, history: chatHistory } });
+    chatHistory.push({ role: "user", text: question }, { role: "assistant", text: answer });
+    $(".content", pending).innerHTML = mdLite(answer);
+    pending.scrollIntoView({ block: "end", behavior: "smooth" });
+  } catch (err) {
+    pending.remove();
+    $("#chat-err").textContent = /Gemini|chiave/i.test(err.message)
+      ? "L'assistente non è ancora attivo: manca la chiave Gemini nelle impostazioni di Netlify."
+      : err.message;
+  }
+}
+
+/* ===================== eventi ===================== */
 document.addEventListener("submit", async (e) => {
   const form = e.target;
+  e.preventDefault();
+
   if (form.id === "f-login") {
-    e.preventDefault();
     const typed = form.code.value.trim();
+    const btn = form.querySelector("button[type=submit]");
+    btn.disabled = true;
     try {
       const res = await fetch("/api/login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ code: typed }) });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Codice non valido.");
-      code = typed;
-      try { localStorage.setItem("fip-code", code); } catch {}
-      $("#login-err").textContent = "";
-      form.code.value = "";
+      code = typed; store.set("fip-code", code);
+      $("#login-err").textContent = ""; form.code.value = "";
       await start();
     } catch (err) {
       $("#login-err").textContent = err.message;
-    }
+    } finally { btn.disabled = false; }
     return;
   }
 
   if (form.id === "f-chat") {
-    e.preventDefault();
-    askAssistant(form.q.value.trim());
+    const q = form.q.value.trim();
     form.q.value = "";
+    askAssistant(q);
     return;
   }
 
-  if (form.dataset.col) {
-    e.preventDefault();
-    const col = form.dataset.col;
+  if (form.id === "f-task") {
     const data = Object.fromEntries(new FormData(form));
-    if (col === "docs") {
-      data.version = 1;
-      data.status = "bozza";
-      data.history = [{ version: 1, by: S.me, at: new Date().toISOString(), note: "Creato" }];
-    }
+    data.status = "todo";
+    if (!data.owner) data.owner = S.me;
+    const btn = form.querySelector("button[type=submit]");
+    btn.disabled = true;
     try {
-      await saveItem(col, data);
-      form.reset();
-      renderAll();
-    } catch (err) {
-      showError(err);
-    }
+      await saveItem("tasks", data);
+      form.title.value = ""; form.due.value = "";
+      toast("Compito aggiunto");
+    } catch (err) { toast(err.message); }
+    finally { btn.disabled = false; }
+    return;
   }
-});
 
-document.addEventListener("change", async (e) => {
-  const field = e.target.dataset.field;
-  if (!field) return;
-  const item = e.target.closest("[data-id]");
-  try {
-    await patchItem(item.dataset.col, item.dataset.id, { [field]: e.target.value });
-  } catch (err) {
-    showError(err);
+  if (form.id === "sheet-form" && sheetHandler) {
+    const btn = $("#sheet-submit");
+    btn.disabled = true;
+    try {
+      const result = await sheetHandler(Object.fromEntries(new FormData(form)));
+      if (result !== KEEP_OPEN) { closeSheet(); toast("Salvato"); }
+    } catch (err) {
+      $("#sheet-err").textContent = err.message;
+    } finally { btn.disabled = false; }
   }
 });
 
 document.addEventListener("click", async (e) => {
-  const tab = e.target.closest("[data-tab]");
-  if (tab) return showTab(tab.dataset.tab);
+  const el = (sel) => e.target.closest(sel);
+  let x;
 
-  const ask = e.target.closest("[data-ask]");
-  if (ask) return askAssistant(ask.dataset.ask);
+  if (el("[data-close]") || e.target.id === "sheet") return closeSheet();
+  if ((x = el("[data-seen]"))) { const id = x.closest("[data-id]")?.dataset.id; if (id) markDocSeen(id).catch(() => {}); return; }
+  if ((x = el("[data-calpick]"))) { setTimeout(closeSheet, 300); return; }
+  if ((x = el("[data-go]"))) return showTab(x.dataset.go);
+  if ((x = el("[data-ask]"))) return askAssistant(x.dataset.ask);
+  if ((x = el("[data-taskview]"))) { ui.taskView = x.dataset.taskview; store.set("fip-taskview", ui.taskView); return renderTasks(); }
+  if ((x = el("[data-taskcol]"))) { $("#col-" + x.dataset.taskcol)?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" }); return; }
+  if ((x = el("[data-docfilter]"))) { ui.docFilter = x.dataset.docfilter; return renderDocs(); }
+  if ((x = el("[data-notefilter]"))) { ui.noteFilter = x.dataset.notefilter; return renderNotes(); }
+  if ((x = el("[data-calmode]"))) { ui.calMode = x.dataset.calmode; store.set("fip-calmode", ui.calMode); return renderCalendar(); }
+  if ((x = el("[data-calfilter]"))) { ui.calFilter = x.dataset.calfilter; return renderCalendar(); }
+  if ((x = el("[data-calnav]"))) {
+    const step = Number(x.dataset.calnav);
+    if (step === 0) ui.calDate = new Date();
+    else if (ui.calMode === "month") ui.calDate = new Date(ui.calDate.getFullYear(), ui.calDate.getMonth() + step, 1);
+    else ui.calDate = addDays(ui.calDate, 7 * step);
+    return renderCalendar();
+  }
+  if ((x = el("[data-day]"))) {
+    ui.calDate = parseKey(x.dataset.day);
+    renderCalendar();
+    const target = $("#day-" + x.dataset.day);
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+    else if (ui.calMode === "month") openEventForm(null, x.dataset.day);
+    return;
+  }
 
-  if (e.target.id === "logout") return logout();
+  if ((x = el("[data-act]"))) {
+    const act = x.dataset.act;
+    const holder = x.closest("[data-id]");
+    const id = holder?.dataset.id;
+    try {
+      if (act === "logout") return logout();
+      if (act === "admin") return await openAdmin();
+      if (act === "add-cal") return openAddToCalendar(id);
+      if (act === "ics") { downloadIcs(S.events.find((y) => y.id === id)); closeSheet(); return toast("File del calendario scaricato: aprilo per aggiungerlo"); }
+      if (act === "user-code" || act === "user-del") return await userAction(act, id, x);
+      if (act === "copy-code") { await navigator.clipboard.writeText(x.dataset.code); return toast("Codice copiato"); }
+      if (act === "seen") { await markDocSeen(id); return toast("Segnato come visto"); }
+      if (act === "new-doc") return openDocForm();
+      if (act === "new-event") return openEventForm(null, ui.tab === "calendario" ? keyOf(ui.calDate) : undefined);
+      if (act === "new-note") return openNoteForm();
+      if (act === "edit-doc") return openDocForm(id);
+      if (act === "edit-note") return openNoteForm(id);
+      if (act === "newver") return openNewVersion(id);
+      if (act === "toggle-done") {
+        const t = S.tasks.find((y) => y.id === id);
+        await patchItem("tasks", id, { status: t.status === "done" ? "todo" : "done" });
+        return toast(t.status === "done" ? "Compito riaperto" : "Compito completato");
+      }
+      if (act === "confirm" || act === "sent" || act === "reopen") {
+        const d = S.docs.find((y) => y.id === id);
+        const status = { confirm: "confermato", sent: "inviato", reopen: "da_confermare" }[act];
+        const note = { confirm: "Confermato", sent: "Inviato", reopen: "Riaperto" }[act];
+        await patchItem("docs", id, { status, history: [...(d.history || []), { version: d.version, by: S.me, at: new Date().toISOString(), note }] });
+        return toast(`${d.title}: ${DOC_STATUS[status].toLowerCase()}`);
+      }
+    } catch (err) { toast(err.message); }
+    return;
+  }
 
-  const act = e.target.closest("[data-act]");
-  if (!act) return;
-  const item = act.closest("[data-id]");
-  const col = item.dataset.col, id = item.dataset.id;
-
-  try {
-    if (act.dataset.act === "del") {
-      if (!confirm("Eliminare definitivamente questo elemento?")) return;
-      await api(`item?collection=${col}&id=${encodeURIComponent(id)}`, { method: "DELETE" });
-      await refresh();
-    }
-    if (act.dataset.act === "newver") {
-      const doc = S.docs.find((x) => x.id === id);
-      const note = prompt("Cosa cambia in questa versione?");
-      if (note === null) return;
-      const version = doc.version + 1;
-      await patchItem("docs", id, {
-        version,
-        status: "da_confermare",
-        history: [...(doc.history || []), { version, by: S.me, at: new Date().toISOString(), note: note.trim() }],
-      });
-    }
-  } catch (err) {
-    showError(err);
+  if ((x = el("[data-open]")) && !el("button, a, select, input")) {
+    if (x.dataset.open === "task") return openTask(x.dataset.id);
+    if (x.dataset.open === "event") return openEventForm(x.dataset.id);
   }
 });
 
-function showTab(name) {
-  $$("[data-tab]").forEach((b) => (b.dataset.tab === name ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current")));
-  $$("[data-view]").forEach((v) => { v.hidden = v.dataset.view !== name; });
-}
-
-const chatHistory = [];
-function addBubble(role, text) {
-  const div = document.createElement("div");
-  div.className = "bubble " + role;
-  div.textContent = text;
-  $("#chat").appendChild(div);
-  $("#chat").scrollTop = $("#chat").scrollHeight;
-}
-
-async function askAssistant(question) {
-  if (!question) return;
-  $("#chat-err").textContent = "";
-  addBubble("user", question);
-  const pending = document.createElement("div");
-  pending.className = "bubble assistant";
-  pending.textContent = "Sto controllando…";
-  $("#chat").appendChild(pending);
-  try {
-    const { answer } = await api("ai", { method: "POST", body: { question, history: chatHistory } });
-    chatHistory.push({ role: "user", text: question }, { role: "assistant", text: answer });
-    pending.textContent = answer;
-  } catch (err) {
-    pending.remove();
-    $("#chat-err").textContent = err.message;
-  }
-}
+document.addEventListener("input", (e) => {
+  if (e.target.id === "doc-q") renderDocs();
+  if (e.target.id === "note-q") renderNotes();
+});
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !$("#sheet").hidden) closeSheet(); });
 
 function logout() {
-  code = "";
-  try { localStorage.removeItem("fip-code"); } catch {}
-  lastKey = "";
+  code = ""; store.del("fip-code"); lastKey = "";
+  closeSheet();
   $("#app").hidden = true;
   $("#login").hidden = false;
 }
-
 async function start() {
-  try {
-    await refresh();
-  } catch (err) {
-    if (!code) return;
-    showError(err);
-  }
+  try { await refresh(true); }
+  catch (err) { if (!code) return; toast(err.message); }
   $("#login").hidden = true;
   $("#app").hidden = false;
-  showTab("oggi");
+  showTab(ui.tab);
 }
 
-setInterval(() => { if (code) refresh().catch(() => {}); }, 30000);
+setInterval(() => { if (code && !document.hidden) refresh().catch(() => {}); }, 30000);
 document.addEventListener("visibilitychange", () => { if (!document.hidden && code) refresh().catch(() => {}); });
 
-(async () => {
-  if (code) return start();
-  $("#login").hidden = false;
-})();
+if (code) start(); else $("#login").hidden = false;
 </script>
 </body>
 </html>
