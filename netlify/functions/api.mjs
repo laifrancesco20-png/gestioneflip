@@ -17,8 +17,11 @@ function json(status, body) {
 // ACCESS_CODES = {"<codice personale>": "<nome>", ...} impostata nelle variabili d'ambiente di Netlify.
 function accessMap() {
   try {
-    return JSON.parse(process.env.ACCESS_CODES || "{}");
+    const map = JSON.parse(process.env.ACCESS_CODES || "{}");
+    if (!Object.keys(map).length) console.error("ACCESS_CODES non impostata: nessuno può accedere.");
+    return map;
   } catch {
+    console.error("ACCESS_CODES non è un JSON valido.");
     return {};
   }
 }
