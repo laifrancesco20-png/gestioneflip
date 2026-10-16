@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FIP Silver Alghero – Coordinamento</title>
+<style>
+:root {
+  --bg: #f3f6f5; --surface: #ffffff; --ink: #15202b; --muted: #5b6977; --line: #dbe3e6;
+  --accent: #0d6b76; --accent-ink: #ffffff; --soft: #e3f0f1;
+  --warn: #8a5300; --warn-bg: #fbeed6; --ok: #23764a; --ok-bg: #e2f3ea; --danger: #b42318;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1719; --surface: #172126; --ink: #e6eef0; --muted: #97a6ad; --line: #2a3840;
+    --accent: #5fc3cf; --accent-ink: #0b1517; --soft: #1d3138;
+    --warn: #f2b35c; --warn-bg: #33270f; --ok: #6fd49a; --ok-bg: #153125; --danger: #ff8a80;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1719; --surface: #172126; --ink: #e6eef0; --muted: #97a6ad; --line: #2a3840;
+  --accent: #5fc3cf; --accent-ink: #0b1517; --soft: #1d3138;
+  --warn: #f2b35c; --warn-bg: #33270f; --ok: #6fd49a; --ok-bg: #153125; --danger: #ff8a80;
+  color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; }
+body {
+  background: var(--bg); color: var(--ink);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+  max-width: 960px; margin-inline: auto;
+}
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1 { font-size: 18px; margin: 0; font-weight: 650; }
+h2 { font-size: 15px; margin: 0 0 10px; font-weight: 650; }
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 0 12px; flex-wrap: wrap; }
+.meta { color: var(--muted); font-size: 13px; }
+nav { display: flex; gap: 6px; overflow-x: auto; border-bottom: 1px solid var(--line); margin-bottom: 18px; }
+nav button {
+  background: none; border: 0; border-bottom: 2px solid transparent; border-radius: 0;
+  color: var(--muted); padding: 10px 10px; white-space: nowrap;
+}
+nav button[aria-current="page"] { color: var(--accent); border-bottom-color: var(--accent); font-weight: 600; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin-bottom: 14px; min-width: 0; }
+.grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+form.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); flex: 1 1 150px; min-width: 0; }
+input, select, textarea {
+  font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line);
+  border-radius: 8px; padding: 8px 10px; min-width: 0; width: 100%;
+}
+textarea { min-height: 80px; resize: vertical; }
+button {
+  font: inherit; cursor: pointer; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; white-space: nowrap;
+}
+button.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 600; }
+button.ghost { background: transparent; color: var(--muted); }
+button.danger { color: var(--danger); }
+.item {
+  display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; justify-content: space-between;
+  padding: 12px 0; border-top: 1px solid var(--line);
+}
+.item:first-child { border-top: 0; padding-top: 4px; }
+.item .body { flex: 1 1 220px; min-width: 0; overflow-wrap: anywhere; }
+.item .actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.item select { width: auto; }
+.pill { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 99px; background: var(--soft); color: var(--accent); margin-right: 6px; }
+.pill.warn { background: var(--warn-bg); color: var(--warn); }
+.pill.ok { background: var(--ok-bg); color: var(--ok); }
+.empty { color: var(--muted); padding: 8px 0; margin: 0; }
+.err { color: var(--danger); font-size: 14px; min-height: 1.2em; margin: 8px 0 0; }
+.day { font-size: 13px; color: var(--muted); font-weight: 600; margin: 14px 0 2px; }
+details summary { cursor: pointer; color: var(--accent); font-size: 13px; margin-top: 6px; }
+.history { font-size: 13px; color: var(--muted); padding-left: 16px; margin: 6px 0 0; }
+.login { max-width: 360px; margin: 14vh auto 0; }
+.login h1 { margin-bottom: 4px; }
+.chat { display: flex; flex-direction: column; gap: 10px; min-height: 240px; max-height: 60vh; overflow-y: auto; padding-bottom: 8px; }
+.bubble { max-width: 88%; padding: 9px 12px; border-radius: 12px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.bubble.user { align-self: flex-end; background: var(--accent); color: var(--accent-ink); border-bottom-right-radius: 3px; }
+.bubble.assistant { align-self: flex-start; background: var(--soft); border-bottom-left-radius: 3px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.chips button { font-size: 13px; color: var(--muted); }
+#f-chat { display: flex; gap: 8px; margin-top: 10px; }
+#f-chat input { flex: 1; }
+</style>
+</head>
+<body>
+
+<section id="login" class="login" hidden>
+  <h1>FIP Silver Alghero 2027</h1>
+  <p class="meta">Coordinamento organizzatori. Inserisci il tuo codice personale.</p>
+  <form id="f-login" class="card">
+    <label>Codice personale
+      <input id="code" type="password" autocomplete="off" required>
+    </label>
+    <p style="margin-top:12px"><button class="primary" type="submit" style="width:100%">Entra</button></p>
+    <p id="login-err" class="err" role="alert"></p>
+  </form>
+</section>
+
+<div id="app" hidden>
+  <header class="top">
+    <div>
+      <h1>FIP Silver Alghero 2027</h1>
+      <div class="meta" id="who"></div>
+    </div>
+    <button class="ghost" id="logout" type="button">Esci</button>
+  </header>
+
+  <nav id="tabs" aria-label="Sezioni">
+    <button type="button" data-tab="oggi" aria-current="page">Oggi</button>
+    <button type="button" data-tab="compiti">Compiti</button>
+    <button type="button" data-tab="documenti">Documenti</button>
+    <button type="button" data-tab="calendario">Calendario</button>
+    <button type="button" data-tab="note">Note</button>
+    <button type="button" data-tab="assistente">Assistente</button>
+  </nav>
+
+  <section data-view="oggi" class="grid">
+    <div class="card"><h2>I miei compiti aperti</h2><div id="o-tasks"></div></div>
+    <div class="card"><h2>Documenti da confermare</h2><div id="o-docs"></div></div>
+    <div class="card"><h2>Prossimi impegni (14 giorni)</h2><div id="o-events"></div></div>
+    <div class="card"><h2>Ultime modifiche</h2><div id="o-changes"></div></div>
+  </section>
+
+  <section data-view="compiti" hidden>
+    <form class="card row" id="f-task" data-col="tasks">
+      <label style="flex-basis:100%">Compito<input name="title" required maxlength="200" placeholder="Es. Inviare la domanda al Comune"></label>
+      <label>Responsabile<select name="owner" data-people></select></label>
+      <label>Scadenza<input name="due" type="date"></label>
+      <button class="primary" type="submit">Aggiungi</button>
+    </form>
+    <div class="card" id="l-tasks"></div>
+  </section>
+
+  <section data-view="documenti" hidden>
+    <form class="card row" id="f-doc" data-col="docs">
+      <label style="flex-basis:100%">Documento<input name="title" required maxlength="200" placeholder="Es. Lettera al Prefetto"></label>
+      <label>Responsabile<select name="owner" data-people></select></label>
+      <label>Link (OneDrive o Drive)<input name="link" type="url" placeholder="https://"></label>
+      <button class="primary" type="submit">Aggiungi</button>
+    </form>
+    <div class="card" id="l-docs"></div>
+  </section>
+
+  <section data-view="calendario" hidden>
+    <form class="card row" id="f-event" data-col="events">
+      <label style="flex-basis:100%">Titolo<input name="title" required maxlength="200" placeholder="Es. Non disponibile / Riunione organizzatori"></label>
+      <label>Persona<select name="person" data-people></select></label>
+      <label>Tipo<select name="kind"><option value="indisponibile">Non disponibile</option><option value="riunione">Riunione</option></select></label>
+      <label>Giorno<input name="date" type="date" required></label>
+      <label>Dalle<input name="start" type="time"></label>
+      <label>Alle<input name="end" type="time"></label>
+      <button class="primary" type="submit">Aggiungi</button>
+    </form>
+    <div class="card" id="l-events"></div>
+  </section>
+
+  <section data-view="note" hidden>
+    <form class="card row" id="f-note" data-col="notes">
+      <label style="flex-basis:100%">Titolo (facoltativo)<input name="title" maxlength="200"></label>
+      <label style="flex-basis:100%">Nota<textarea name="text" required maxlength="2000"></textarea></label>
+      <button class="primary" type="submit">Salva nota</button>
+    </form>
+    <div class="card" id="l-notes"></div>
+  </section>
+
+  <section data-view="assistente" hidden>
+    <div class="card">
+      <div class="chips">
+        <button type="button" data-ask="Chi è libero giovedì alle 18?">Chi è libero giovedì alle 18?</button>
+        <button type="button" data-ask="Cosa devo fare io?">Cosa devo fare io?</button>
+        <button type="button" data-ask="Quali documenti sono ancora da confermare?">Documenti da confermare</button>
+      </div>
+      <div class="chat" id="chat" aria-live="polite"></div>
+      <form id="f-chat">
+        <input name="q" required maxlength="2000" placeholder="Scrivi una domanda sul team, i compiti o il calendario">
+        <button class="primary" type="submit">Chiedi</button>
+      </form>
+      <p class="err" id="chat-err" role="alert"></p>
+    </div>
+  </section>
+
+  <p class="err" id="app-err" role="alert"></p>
+</div>
+
+<script>
+const $ = (s, root = document) => root.querySelector(s);
+const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+const LABEL = {
+  todo: "Da fare", doing: "In corso", done: "Fatto",
+  bozza: "Bozza", da_confermare: "Da confermare", confermato: "Confermato", inviato: "Inviato",
+  indisponibile: "Non disponibile", riunione: "Riunione",
+};
+const TONE = { done: "ok", confermato: "ok", inviato: "ok", da_confermare: "warn", indisponibile: "warn" };
+const COLLECTION_NAME = { tasks: "Compiti", docs: "Documenti", events: "Calendario", notes: "Note" };
+
+let code = "";
+try { code = localStorage.getItem("fip-code") || ""; } catch {}
+let S = { me: "", people: [], tasks: [], docs: [], events: [], notes: [] };
+let lastKey = "";
+
+const today = () => {
+  const d = new Date();
+  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+  return d.toISOString().slice(0, 10);
+};
+const fmtDate = (s) => {
+  if (!s) return "";
+  const [y, m, d] = s.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "short" });
+};
+const fmtWhen = (iso) => (iso ? new Date(iso).toLocaleString("it-IT", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }) : "");
+const pill = (key) => `<span class="pill ${TONE[key] || ""}">${esc(LABEL[key] || key)}</span>`;
+const options = (values, selected, labels = {}) =>
+  values.map((v) => `<option value="${esc(v)}" ${v === selected ? "selected" : ""}>${esc(labels[v] || LABEL[v] || v)}</option>`).join("");
+
+async function api(path, opts = {}) {
+  const res = await fetch("/api/" + path, {
+    method: opts.method || "GET",
+    headers: { "content-type": "application/json", "x-code": code },
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (res.status === 401) { logout(); throw new Error(data.error || "Accesso non valido."); }
+  if (!res.ok) throw new Error(data.error || "Errore " + res.status);
+  return data;
+}
+
+function showError(err, where = "#app-err") {
+  $(where).textContent = err.message || String(err);
+  setTimeout(() => { $(where).textContent = ""; }, 6000);
+}
+
+async function refresh() {
+  const data = await api("state");
+  const key = JSON.stringify(data);
+  if (key === lastKey) return;
+  lastKey = key;
+  S = data;
+  renderAll();
+}
+
+async function saveItem(col, data, id) {
+  await api("item", { method: "PUT", body: { collection: col, id, data } });
+  await refresh();
+}
+
+async function patchItem(col, id, changes) {
+  const item = S[col].find((x) => x.id === id);
+  if (!item) return;
+  const { id: _, createdBy, createdAt, updatedBy, updatedAt, ...data } = item;
+  await saveItem(col, { ...data, ...changes }, id);
+}
+
+/* ---------- rendering ---------- */
+
+function renderAll() {
+  $("#who").textContent = "Accesso come " + S.me;
+  $$("select[data-people]").forEach((sel) => {
+    const prev = sel.value || S.me;
+    sel.innerHTML = options(S.people, S.people.includes(prev) ? prev : S.me, {});
+  });
+  renderToday();
+  renderTasks();
+  renderDocs();
+  renderEvents();
+  renderNotes();
+}
+
+function renderToday() {
+  const t = today();
+  const myTasks = S.tasks.filter((x) => x.owner === S.me && x.status !== "done");
+  $("#o-tasks").innerHTML = myTasks.length
+    ? myTasks.map((x) => `<div class="item"><div class="body"><strong>${esc(x.title)}</strong><div class="meta">${x.due ? "entro " + fmtDate(x.due) : "senza scadenza"}</div></div>${pill(x.status)}</div>`).join("")
+    : `<p class="empty">Nessun compito aperto a tuo nome.</p>`;
+
+  const waiting = S.docs.filter((x) => x.status === "da_confermare");
+  $("#o-docs").innerHTML = waiting.length
+    ? waiting.map((x) => `<div class="item"><div class="body"><strong>${esc(x.title)}</strong><div class="meta">v${x.version} · ${esc(x.owner || "nessun responsabile")}</div></div>${pill(x.status)}</div>`).join("")
+    : `<p class="empty">Nessun documento in attesa di conferma.</p>`;
+
+  const limit = new Date(); limit.setDate(limit.getDate() + 14);
+  const limitKey = limit.toISOString().slice(0, 10);
+  const soon = S.events.filter((e) => e.date >= t && e.date <= limitKey);
+  $("#o-events").innerHTML = soon.length
+    ? soon.map((e) => `<div class="item"><div class="body"><strong>${esc(e.title)}</strong><div class="meta">${fmtDate(e.date)}${e.start ? " · " + esc(e.start) + (e.end ? "–" + esc(e.end) : "") : ""} · ${esc(e.person)}</div></div>${pill(e.kind)}</div>`).join("")
+    : `<p class="empty">Nessun impegno nei prossimi 14 giorni.</p>`;
+
+  const changes = [
+    ...S.tasks.map((x) => ({ ...x, col: "tasks" })),
+    ...S.docs.map((x) => ({ ...x, col: "docs" })),
+    ...S.events.map((x) => ({ ...x, col: "events" })),
+    ...S.notes.map((x) => ({ ...x, col: "notes" })),
+  ].filter((x) => x.updatedAt).sort((a, b) => b.updatedAt.localeCompare(a.updatedAt)).slice(0, 8);
+  $("#o-changes").innerHTML = changes.length
+    ? changes.map((x) => `<div class="item"><div class="body"><strong>${esc(x.title || x.text?.slice(0, 60) || "Nota")}</strong><div class="meta">${esc(x.updatedBy)} · ${esc(COLLECTION_NAME[x.col])} · ${fmtWhen(x.updatedAt)}</div></div></div>`).join("")
+    : `<p class="empty">Ancora nessuna modifica.</p>`;
+}
+
+function renderTasks() {
+  const list = [...S.tasks].sort((a, b) =>
+    (a.status === "done") - (b.status === "done") || (a.due || "9999").localeCompare(b.due || "9999"));
+  $("#l-tasks").innerHTML = list.length ? list.map((x) => `
+    <div class="item" data-col="tasks" data-id="${esc(x.id)}">
+      <div class="body"><strong>${esc(x.title)}</strong>
+        <div class="meta">${esc(x.owner || "nessun responsabile")}${x.due ? " · entro " + fmtDate(x.due) : ""} · aggiornato da ${esc(x.updatedBy)}</div>
+        ${x.notes ? `<div class="meta">${esc(x.notes)}</div>` : ""}
+      </div>
+      <div class="actions">
+        <select data-field="owner" aria-label="Responsabile">${options(S.people, x.owner)}</select>
+        <select data-field="status" aria-label="Stato">${options(["todo", "doing", "done"], x.status)}</select>
+        <button class="ghost danger" data-act="del" type="button">Elimina</button>
+      </div>
+    </div>`).join("") : `<p class="empty">Nessun compito. Aggiungine uno sopra.</p>`;
+}
+
+function renderDocs() {
+  $("#l-docs").innerHTML = S.docs.length ? S.docs.map((x) => `
+    <div class="item" data-col="docs" data-id="${esc(x.id)}" style="display:block">
+      <div style="display:flex;flex-wrap:wrap;gap:8px 12px;justify-content:space-between;align-items:center">
+        <div class="body"><strong>${esc(x.title)}</strong>
+          <div class="meta">Versione ${x.version} · ${esc(x.owner || "nessun responsabile")} · aggiornato da ${esc(x.updatedBy)} ${fmtWhen(x.updatedAt)}</div>
+          ${x.link ? `<div class="meta"><a href="${esc(x.link)}" target="_blank" rel="noopener noreferrer">Apri il file</a></div>` : ""}
+        </div>
+        <div class="actions">
+          ${pill(x.status)}
+          <select data-field="owner" aria-label="Responsabile">${options(S.people, x.owner)}</select>
+          <select data-field="status" aria-label="Stato">${options(["bozza", "da_confermare", "confermato", "inviato"], x.status)}</select>
+          <button type="button" data-act="newver">Nuova versione</button>
+          <button class="ghost danger" data-act="del" type="button">Elimina</button>
+        </div>
+      </div>
+      <details>
+        <summary>Storico versioni (${(x.history || []).length})</summary>
+        <ul class="history">${[...(x.history || [])].reverse().map((h) => `<li>v${h.version} · ${esc(h.by)} · ${fmtWhen(h.at)} — ${esc(h.note || "")}</li>`).join("")}</ul>
+      </details>
+    </div>`).join("") : `<p class="empty">Nessun documento. Aggiungine uno sopra.</p>`;
+}
+
+function renderEvents() {
+  const t = today();
+  const list = S.events.filter((e) => e.date >= t);
+  let html = "", lastDay = "";
+  for (const e of list) {
+    if (e.date !== lastDay) { html += `<div class="day">${fmtDate(e.date)}</div>`; lastDay = e.date; }
+    html += `
+    <div class="item" data-col="events" data-id="${esc(e.id)}">
+      <div class="body"><strong>${esc(e.title)}</strong>
+        <div class="meta">${esc(e.person)}${e.start ? " · " + esc(e.start) + (e.end ? "–" + esc(e.end) : "") : " · tutto il giorno"}</div>
+      </div>
+      <div class="actions">
+        ${pill(e.kind)}
+        <button class="ghost danger" data-act="del" type="button">Elimina</button>
+      </div>
+    </div>`;
+  }
+  $("#l-events").innerHTML = html || `<p class="empty">Nessun impegno in programma.</p>`;
+}
+
+function renderNotes() {
+  $("#l-notes").innerHTML = S.notes.length ? S.notes.map((x) => `
+    <div class="item" data-col="notes" data-id="${esc(x.id)}" style="display:block">
+      ${x.title ? `<strong>${esc(x.title)}</strong>` : ""}
+      <div style="white-space:pre-wrap;overflow-wrap:anywhere;margin-top:4px">${esc(x.text)}</div>
+      <div class="meta" style="margin-top:6px">${esc(x.createdBy)} · ${fmtWhen(x.createdAt)}
+        <button class="ghost danger" data-act="del" type="button" style="margin-left:8px">Elimina</button></div>
+    </div>`).join("") : `<p class="empty">Nessuna nota.</p>`;
+}
+
+/* ---------- actions ---------- */
+
+document.addEventListener("submit", async (e) => {
+  const form = e.target;
+  if (form.id === "f-login") {
+    e.preventDefault();
+    const typed = form.code.value.trim();
+    try {
+      const res = await fetch("/api/login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ code: typed }) });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || "Codice non valido.");
+      code = typed;
+      try { localStorage.setItem("fip-code", code); } catch {}
+      $("#login-err").textContent = "";
+      form.code.value = "";
+      await start();
+    } catch (err) {
+      $("#login-err").textContent = err.message;
+    }
+    return;
+  }
+
+  if (form.id === "f-chat") {
+    e.preventDefault();
+    askAssistant(form.q.value.trim());
+    form.q.value = "";
+    return;
+  }
+
+  if (form.dataset.col) {
+    e.preventDefault();
+    const col = form.dataset.col;
+    const data = Object.fromEntries(new FormData(form));
+    if (col === "docs") {
+      data.version = 1;
+      data.status = "bozza";
+      data.history = [{ version: 1, by: S.me, at: new Date().toISOString(), note: "Creato" }];
+    }
+    try {
+      await saveItem(col, data);
+      form.reset();
+      renderAll();
+    } catch (err) {
+      showError(err);
+    }
+  }
+});
+
+document.addEventListener("change", async (e) => {
+  const field = e.target.dataset.field;
+  if (!field) return;
+  const item = e.target.closest("[data-id]");
+  try {
+    await patchItem(item.dataset.col, item.dataset.id, { [field]: e.target.value });
+  } catch (err) {
+    showError(err);
+  }
+});
+
+document.addEventListener("click", async (e) => {
+  const tab = e.target.closest("[data-tab]");
+  if (tab) return showTab(tab.dataset.tab);
+
+  const ask = e.target.closest("[data-ask]");
+  if (ask) return askAssistant(ask.dataset.ask);
+
+  if (e.target.id === "logout") return logout();
+
+  const act = e.target.closest("[data-act]");
+  if (!act) return;
+  const item = act.closest("[data-id]");
+  const col = item.dataset.col, id = item.dataset.id;
+
+  try {
+    if (act.dataset.act === "del") {
+      if (!confirm("Eliminare definitivamente questo elemento?")) return;
+      await api(`item?collection=${col}&id=${encodeURIComponent(id)}`, { method: "DELETE" });
+      await refresh();
+    }
+    if (act.dataset.act === "newver") {
+      const doc = S.docs.find((x) => x.id === id);
+      const note = prompt("Cosa cambia in questa versione?");
+      if (note === null) return;
+      const version = doc.version + 1;
+      await patchItem("docs", id, {
+        version,
+        status: "da_confermare",
+        history: [...(doc.history || []), { version, by: S.me, at: new Date().toISOString(), note: note.trim() }],
+      });
+    }
+  } catch (err) {
+    showError(err);
+  }
+});
+
+function showTab(name) {
+  $$("[data-tab]").forEach((b) => (b.dataset.tab === name ? b.setAttribute("aria-current", "page") : b.removeAttribute("aria-current")));
+  $$("[data-view]").forEach((v) => { v.hidden = v.dataset.view !== name; });
+}
+
+const chatHistory = [];
+function addBubble(role, text) {
+  const div = document.createElement("div");
+  div.className = "bubble " + role;
+  div.textContent = text;
+  $("#chat").appendChild(div);
+  $("#chat").scrollTop = $("#chat").scrollHeight;
+}
+
+async function askAssistant(question) {
+  if (!question) return;
+  $("#chat-err").textContent = "";
+  addBubble("user", question);
+  const pending = document.createElement("div");
+  pending.className = "bubble assistant";
+  pending.textContent = "Sto controllando…";
+  $("#chat").appendChild(pending);
+  try {
+    const { answer } = await api("ai", { method: "POST", body: { question, history: chatHistory } });
+    chatHistory.push({ role: "user", text: question }, { role: "assistant", text: answer });
+    pending.textContent = answer;
+  } catch (err) {
+    pending.remove();
+    $("#chat-err").textContent = err.message;
+  }
+}
+
+function logout() {
+  code = "";
+  try { localStorage.removeItem("fip-code"); } catch {}
+  lastKey = "";
+  $("#app").hidden = true;
+  $("#login").hidden = false;
+}
+
+async function start() {
+  try {
+    await refresh();
+  } catch (err) {
+    if (!code) return;
+    showError(err);
+  }
+  $("#login").hidden = true;
+  $("#app").hidden = false;
+  showTab("oggi");
+}
+
+setInterval(() => { if (code) refresh().catch(() => {}); }, 30000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden && code) refresh().catch(() => {}); });
+
+(async () => {
+  if (code) return start();
+  $("#login").hidden = false;
+})();
+</script>
+</body>
+</html>
