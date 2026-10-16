@@ -429,6 +429,10 @@ main {
 .ev.meeting .notes { color: #e0e7ff; }
 .ev.meeting .ev-foot { display: flex; align-items: center; gap: 8px; border-top: 1px solid rgba(255,255,255,.18); padding-top: 8px; font-size: 12px; font-weight: 600; color: #e0e7ff; }
 .ev.meeting .ev-foot .ms { margin-left: auto; }
+.addcal { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; border: 0; border-radius: 99px; padding: 6px 12px; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer; background: rgba(255,255,255,.16); color: #fff; }
+.addcal:hover { background: rgba(255,255,255,.26); }
+.cal-links { display: flex; flex-direction: column; gap: 8px; grid-column: 1 / -1; }
+.cal-links .btn { justify-content: flex-start; text-decoration: none; }
 .ev.away {
   color: var(--ink);
   background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--c) 10%, white) 0 12px, color-mix(in srgb, var(--c) 5%, white) 12px 24px);
@@ -913,6 +917,7 @@ function eventCard(e) {
       <div class="ev-top"><span class="time-pill">${ic("schedule", "sm")} ${esc(timeRange(e))}</span><span class="ev-tag">Riunione</span></div>
       <h4>${esc(e.title)}</h4>
       ${e.notes ? `<p class="notes">${ic("location_on", "sm")} ${esc(e.notes)}</p>` : ""}
+      <button type="button" class="addcal" data-act="add-cal">${ic("event_available", "sm")} Aggiungi al mio calendario</button>
       <div class="ev-foot">${avatar(e.person, "xs")} <span>Organizza ${esc(e.person)}</span>${ic("chevron_right")}</div>
     </article>`;
   }
@@ -1007,6 +1012,7 @@ function renderOggi() {
             <div class="top"><span class="lbl">${ic("groups", "xs")} ${featured.date === t ? "Riunione stasera" : esc(cap(parseKey(featured.date).toLocaleDateString("it-IT", { weekday: "long", day: "numeric", month: "short" })))}</span><span class="when">${esc(featured.start || "")}</span></div>
             <h3>${esc(featured.title)}</h3>
             ${featured.notes ? `<p class="sub">${ic("location_on", "xs")} ${esc(featured.notes)}</p>` : ""}
+            <button type="button" class="addcal" data-act="add-cal" style="margin:2px 0 10px">${ic("event_available", "sm")} Aggiungi al mio calendario</button>
             <div class="foot"><span class="org">Organizza ${esc(featured.person)}</span><span class="avatars">${S.people.map((p) => avatar(p, "xs")).join("")}</span></div>
           </article>` : ""}
         ${others.slice(0, 5).map((e) => {
@@ -1231,7 +1237,9 @@ const fieldText = (label, name, value = "", attrs = "") =>
 function openSheet({ title, body, submit = "Salva", danger = null, onSubmit }) {
   $("#sheet-title").textContent = title;
   $("#sheet-body").innerHTML = body;
-  $("#sheet-submit").textContent = submit;
+  $("#sheet-submit").textContent = submit || "";
+  $("#sheet-submit").hidden = !submit;
+  $("#sheet-form footer [data-close]").textContent = submit ? "Annulla" : "Chiudi";
   $("#sheet-err").textContent = "";
   const del = $("#sheet-danger");
   del.hidden = !danger;
@@ -1336,6 +1344,80 @@ function openNoteForm(id) {
       fieldText("Testo", "text", n?.text, 'required maxlength="2000" style="min-height:160px"'),
     danger: n ? { label: "Elimina", run: () => deleteItem("notes", id), done: "Nota eliminata" } : null,
     onSubmit: (data) => n ? patchItem("notes", id, data) : saveItem("notes", data),
+  });
+}
+
+/* ===================== riunioni nel calendario personale ===================== */
+const TZ = "Europe/Rome";
+// Scarto di Roma rispetto a UTC in quel giorno e ora, es. "+02:00".
+function romeOffset(date, time) {
+  const guess = new Date(`${date}T${time}:00Z`);
+  const p = Object.fromEntries(new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(guess).map((x) => [x.type, x.value]));
+  const min = Math.round((Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute) - guess) / 60000);
+  return `${min < 0 ? "-" : "+"}${pad(Math.floor(Math.abs(min) / 60))}:${pad(Math.abs(min) % 60)}`;
+}
+function meetingTimes(e) {
+  if (!e.start) return { allDay: true, date: e.date, next: keyOf(addDays(parseKey(e.date), 1)) };
+  let end = e.end && e.end > e.start ? e.end : null;
+  if (!end) { const [h, m] = e.start.split(":").map(Number); end = h >= 23 ? "23:59" : `${pad(h + 1)}:${pad(m)}`; }
+  return { allDay: false, date: e.date, start: e.start, end };
+}
+const meetingText = (e) => [e.notes, `Organizza ${e.person}`, "Dall'app di coordinamento FIP Silver Alghero 2027"].filter(Boolean).join("\n");
+function googleLink(e) {
+  const t = meetingTimes(e), c = (d) => d.replace(/-/g, "");
+  const dates = t.allDay ? `${c(t.date)}/${c(t.next)}` : `${c(t.date)}T${t.start.replace(":", "")}00/${c(t.date)}T${t.end.replace(":", "")}00`;
+  const q = new URLSearchParams({ action: "TEMPLATE", text: e.title, dates, ctz: TZ, details: meetingText(e) });
+  if (e.notes) q.set("location", e.notes.split("\n")[0]);
+  return "https://calendar.google.com/calendar/render?" + q;
+}
+function outlookLink(e) {
+  const t = meetingTimes(e);
+  const q = new URLSearchParams({ subject: e.title, body: meetingText(e), path: "/calendar/action/compose", rru: "addevent" });
+  if (t.allDay) { q.set("startdt", t.date); q.set("enddt", t.next); q.set("allday", "true"); }
+  else { q.set("startdt", `${t.date}T${t.start}:00${romeOffset(t.date, t.start)}`); q.set("enddt", `${t.date}T${t.end}:00${romeOffset(t.date, t.end)}`); }
+  if (e.notes) q.set("location", e.notes.split("\n")[0]);
+  return "https://outlook.office.com/calendar/0/deeplink/compose?" + q;
+}
+function icsFile(e) {
+  const t = meetingTimes(e), c = (d) => d.replace(/-/g, "");
+  const txt = (s) => String(s || "").replace(/\\/g, "\\\\").replace(/;/g, "\\;").replace(/,/g, "\\,").replace(/\r?\n/g, "\\n");
+  const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d+/, "");
+  const lines = [
+    "BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//FIP Silver Alghero 2027//Coordinamento//IT", "METHOD:PUBLISH",
+    "BEGIN:VTIMEZONE", "TZID:Europe/Rome",
+    "BEGIN:DAYLIGHT", "TZOFFSETFROM:+0100", "TZOFFSETTO:+0200", "TZNAME:CEST", "DTSTART:19700329T020000", "RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=-1SU", "END:DAYLIGHT",
+    "BEGIN:STANDARD", "TZOFFSETFROM:+0200", "TZOFFSETTO:+0100", "TZNAME:CET", "DTSTART:19701025T030000", "RRULE:FREQ=YEARLY;BYMONTH=10;BYDAY=-1SU", "END:STANDARD",
+    "END:VTIMEZONE",
+    "BEGIN:VEVENT", `UID:${e.id}@fip-silver-coordinamento`, `DTSTAMP:${stamp}`,
+    ...(t.allDay
+      ? [`DTSTART;VALUE=DATE:${c(t.date)}`, `DTEND;VALUE=DATE:${c(t.next)}`]
+      : [`DTSTART;TZID=${TZ}:${c(t.date)}T${t.start.replace(":", "")}00`, `DTEND;TZID=${TZ}:${c(t.date)}T${t.end.replace(":", "")}00`]),
+    `SUMMARY:${txt(e.title)}`, `DESCRIPTION:${txt(meetingText(e))}`,
+    ...(e.notes ? [`LOCATION:${txt(e.notes.split("\n")[0])}`] : []),
+    "END:VEVENT", "END:VCALENDAR",
+  ];
+  return lines.join("\r\n") + "\r\n";
+}
+function downloadIcs(e) {
+  const url = URL.createObjectURL(new Blob([icsFile(e)], { type: "text/calendar;charset=utf-8" }));
+  const a = Object.assign(document.createElement("a"), { href: url, download: `riunione-${e.date}.ics` });
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
+function openAddToCalendar(id) {
+  const e = S.events.find((x) => x.id === id);
+  if (!e) return;
+  openSheet({
+    title: "Aggiungi al tuo calendario",
+    submit: null,
+    body: `
+      <p class="hint" style="margin:0;grid-column:1/-1"><b>${esc(e.title)}</b><br>${esc(fmtLong(parseKey(e.date)))}${e.start ? `, ${esc(timeRange(e))}` : ""}</p>
+      <div class="cal-links" data-id="${esc(e.id)}">
+        <a class="btn btn-light" href="${esc(googleLink(e))}" target="_blank" rel="noopener noreferrer" data-calpick>${ic("calendar_month")} Google Calendar</a>
+        <a class="btn btn-light" href="${esc(outlookLink(e))}" target="_blank" rel="noopener noreferrer" data-calpick>${ic("mail")} Outlook (Microsoft 365)</a>
+        <button type="button" class="btn btn-light" data-act="ics">${ic("phone_iphone")} iPhone, Mac o altro calendario</button>
+      </div>
+      <p class="hint" style="grid-column:1/-1">Se la riunione cambia orario, aggiungila di nuovo dall'app e cancella quella vecchia dal tuo calendario.</p>`,
   });
 }
 
@@ -1507,6 +1589,7 @@ document.addEventListener("click", async (e) => {
 
   if (el("[data-close]") || e.target.id === "sheet") return closeSheet();
   if ((x = el("[data-seen]"))) { const id = x.closest("[data-id]")?.dataset.id; if (id) markDocSeen(id).catch(() => {}); return; }
+  if ((x = el("[data-calpick]"))) { setTimeout(closeSheet, 300); return; }
   if ((x = el("[data-go]"))) return showTab(x.dataset.go);
   if ((x = el("[data-ask]"))) return askAssistant(x.dataset.ask);
   if ((x = el("[data-taskview]"))) { ui.taskView = x.dataset.taskview; store.set("fip-taskview", ui.taskView); return renderTasks(); }
@@ -1538,6 +1621,8 @@ document.addEventListener("click", async (e) => {
     try {
       if (act === "logout") return logout();
       if (act === "admin") return await openAdmin();
+      if (act === "add-cal") return openAddToCalendar(id);
+      if (act === "ics") { downloadIcs(S.events.find((y) => y.id === id)); closeSheet(); return toast("File del calendario scaricato: aprilo per aggiungerlo"); }
       if (act === "user-code" || act === "user-del") return await userAction(act, id, x);
       if (act === "copy-code") { await navigator.clipboard.writeText(x.dataset.code); return toast("Codice copiato"); }
       if (act === "seen") { await markDocSeen(id); return toast("Segnato come visto"); }
