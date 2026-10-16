@@ -14,23 +14,64 @@ function json(status, body) {
   });
 }
 
-// ACCESS_CODES = {"<codice personale>": "<nome>", ...} impostata nelle variabili d'ambiente di Netlify.
+// Gli account stanno in Blobs ("config/users"), con il codice salvato solo come hash.
+// Al primo avvio vengono creati da ACCESS_CODES = {"<codice>": "<nome>", ...};
+// l'amministratore è chi è elencato in ADMIN_NAMES (nomi separati da virgola) o, in mancanza, il primo.
+const USERS_KEY = "config/users";
+const ROLES = ["admin", "membro", "servizio"];
+
+async function hashCode(code) {
+  const bytes = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(code));
+  return [...new Uint8Array(bytes)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+function newCode() {
+  return [...crypto.getRandomValues(new Uint8Array(4))].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 function accessMap() {
   try {
-    const map = JSON.parse(process.env.ACCESS_CODES || "{}");
-    if (!Object.keys(map).length) console.error("ACCESS_CODES non impostata: nessuno può accedere.");
-    return map;
+    return JSON.parse(process.env.ACCESS_CODES || "{}");
   } catch {
     console.error("ACCESS_CODES non è un JSON valido.");
     return {};
   }
 }
 
-function nameForCode(code) {
-  const map = accessMap();
-  if (!code || !Object.prototype.hasOwnProperty.call(map, code)) return null;
-  return map[code];
+async function loadUsers(store) {
+  const saved = await store.get(USERS_KEY, { type: "json" });
+  if (saved?.users) return saved.users;
+
+  const entries = Object.entries(accessMap());
+  if (!entries.length) {
+    console.error("Nessun account salvato e ACCESS_CODES non impostata: nessuno può accedere.");
+    return [];
+  }
+  const admins = (process.env.ADMIN_NAMES || "").split(",").map((n) => n.trim()).filter(Boolean);
+  const now = new Date().toISOString();
+  const users = await Promise.all(
+    entries.map(async ([code, name], i) => ({
+      id: crypto.randomUUID(),
+      name: clean(name, 80).trim(),
+      hash: await hashCode(code),
+      role: (admins.length ? admins.includes(name) : i === 0) ? "admin" : "membro",
+      createdAt: now,
+      createdBy: "configurazione iniziale",
+    })),
+  );
+  await store.setJSON(USERS_KEY, { users });
+  return users;
 }
+
+async function userForCode(users, code) {
+  if (!code) return null;
+  const hash = await hashCode(code);
+  return users.find((u) => u.hash === hash) || null;
+}
+
+// Le persone che compaiono negli elenchi (responsabili, calendario): niente account di servizio.
+const peopleOf = (users) => [...new Set(users.filter((u) => u.role !== "servizio").map((u) => u.name))].sort();
+const publicUser = ({ id, name, role, createdAt, createdBy }) => ({ id, name, role, createdAt, createdBy });
 
 function clean(value, max = MAX_TEXT) {
   return typeof value === "string" ? value.slice(0, max) : "";
@@ -108,7 +149,7 @@ async function askGemini(question, history, snapshot) {
     "Sei l'assistente del gruppo di organizzatori del torneo FIP Silver Alghero 2027. " +
     "Rispondi in italiano, in modo breve e concreto. Usa solo i dati dello STATO qui sotto. " +
     "Se un dato non c'è, dillo chiaramente. Per la disponibilità: una persona è occupata " +
-    "in un giorno e orario se ha un evento 'indisponibile' che si sovrappone, e ha un 'riunione' nello stesso orario. " +
+    "in un giorno e orario se ha un evento 'indisponibile' che si sovrappone, o se c'è una 'riunione' nello stesso orario. " +
     `Oggi è ${today}.\n\nSTATO:\n${JSON.stringify(snapshot)}`;
 
   const contents = history
@@ -128,73 +169,199 @@ async function askGemini(question, history, snapshot) {
   return text || "Nessuna risposta dal modello.";
 }
 
+const SEEN_PREFIX = "seen/";
+const MAX_BATCH = 300;
+
+// Versione dei documenti già vista da ciascuno: {"<id documento>": <versione>}.
+// La prima volta parte da "tutto visto", così all'arrivo della funzione non risulta tutto nuovo.
+async function loadSeen(store, user, docs) {
+  const saved = await store.get(SEEN_PREFIX + user.id, { type: "json" });
+  if (saved) return saved;
+  const seen = Object.fromEntries(docs.map((d) => [d.id, d.version || 1]));
+  await store.setJSON(SEEN_PREFIX + user.id, seen);
+  return seen;
+}
+
+async function markSeen(store, user, entries) {
+  if (!entries.length) return;
+  const seen = (await store.get(SEEN_PREFIX + user.id, { type: "json" })) || {};
+  for (const [id, version] of entries) seen[id] = Math.max(seen[id] || 0, version);
+  await store.setJSON(SEEN_PREFIX + user.id, seen);
+}
+
+const validId = (id) => typeof id === "string" && /^[\w-]{1,80}$/.test(id);
+
+// Crea o aggiorna un elemento. Con merge=true i campi mancanti restano quelli già salvati.
+async function upsert(store, name, { collection, id, data, merge }) {
+  if (!COLLECTIONS.includes(collection)) throw new HttpError(400, "Collezione non valida.");
+  if (id !== undefined && id !== null && id !== "" && !validId(id)) throw new HttpError(400, "Id non valido.");
+  const finalId = id || crypto.randomUUID();
+  const key = `${collection}/${finalId}`;
+  const previous = await store.get(key, { type: "json" });
+  const input = merge && previous ? { ...previous, ...(data || {}) } : data;
+  const fields = sanitize(collection, input);
+  if (collection !== "notes" && !fields.title) throw new HttpError(400, "Il titolo è obbligatorio.");
+  const now = new Date().toISOString();
+  const record = {
+    ...fields,
+    createdBy: previous?.createdBy || name,
+    createdAt: previous?.createdAt || now,
+    updatedBy: name,
+    updatedAt: now,
+  };
+  await store.setJSON(key, record);
+  return { id: finalId, ...record };
+}
+
+class HttpError extends Error {
+  constructor(status, message) {
+    super(message);
+    this.status = status;
+  }
+}
+
 export default async (req) => {
-  const route = new URL(req.url).pathname.replace(/^\/api\/?/, "");
   const url = new URL(req.url);
+  const route = url.pathname.replace(/^\/api\/?/, "");
 
   try {
+    const store = getStore("fip-silver");
+    const users = await loadUsers(store);
+
     if (route === "login" && req.method === "POST") {
       const body = await req.json().catch(() => ({}));
-      const name = nameForCode(clean(body.code, 200).trim());
-      if (!name) return json(401, { error: "Codice non riconosciuto." });
-      return json(200, { name });
+      const user = await userForCode(users, clean(body.code, 200).trim());
+      if (!user) return json(401, { error: "Codice non riconosciuto." });
+      return json(200, { name: user.name, isAdmin: user.role === "admin" });
     }
 
-    const name = nameForCode((req.headers.get("x-code") || "").trim());
-    if (!name) return json(401, { error: "Accesso non valido. Rientra con il tuo codice." });
-
-    const store = getStore("fip-silver");
+    const me = await userForCode(users, (req.headers.get("x-code") || "").trim());
+    if (!me) return json(401, { error: "Accesso non valido. Rientra con il tuo codice." });
+    const name = me.name;
+    const isAdmin = me.role === "admin";
 
     if (route === "state" && req.method === "GET") {
       const [tasks, docs, events, notes] = await Promise.all(COLLECTIONS.map((c) => readItems(store, c)));
-      const people = [...new Set(Object.values(accessMap()))].sort();
+      const seen = await loadSeen(store, me, docs);
       const byDate = (a, b) => (a.date || "").localeCompare(b.date || "") || (a.start || "").localeCompare(b.start || "");
       return json(200, {
         me: name,
-        people,
+        isAdmin,
+        people: peopleOf(users),
         tasks,
         docs,
         events: events.sort(byDate),
         notes: notes.sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || "")),
+        seen,
       });
     }
 
     if (route === "item" && req.method === "PUT") {
       const body = await req.json().catch(() => ({}));
-      const collection = body.collection;
-      const data = sanitize(collection, body.data);
-      if (!COLLECTIONS.includes(collection) || !data) return json(400, { error: "Collezione non valida." });
-      if (collection !== "notes" && !data.title) return json(400, { error: "Il titolo è obbligatorio." });
-
-      const now = new Date().toISOString();
-      const id = typeof body.id === "string" && body.id ? body.id : crypto.randomUUID();
-      const key = `${collection}/${id}`;
-      const previous = await store.get(key, { type: "json" });
-      const record = {
-        ...data,
-        createdBy: previous?.createdBy || name,
-        createdAt: previous?.createdAt || now,
-        updatedBy: name,
-        updatedAt: now,
-      };
-      await store.setJSON(key, record);
-      return json(200, { id, ...record });
+      const item = await upsert(store, name, body);
+      if (body.collection === "docs") await markSeen(store, me, [[item.id, item.version]]);
+      return json(200, item);
     }
 
     if (route === "item" && req.method === "DELETE") {
       const collection = url.searchParams.get("collection");
       const id = url.searchParams.get("id") || "";
-      if (!COLLECTIONS.includes(collection) || !/^[\w-]{1,80}$/.test(id)) {
-        return json(400, { error: "Richiesta non valida." });
-      }
+      if (!COLLECTIONS.includes(collection) || !validId(id)) return json(400, { error: "Richiesta non valida." });
       await store.delete(`${collection}/${id}`);
       return json(200, { ok: true });
+    }
+
+    // Più modifiche in una volta (caricamenti iniziali, modifiche fatte da Claude).
+    // ops: [{action: "put", collection, id?, data, merge?} | {action: "delete", collection, id}]
+    if (route === "batch" && req.method === "POST") {
+      const body = await req.json().catch(() => ({}));
+      const ops = Array.isArray(body.ops) ? body.ops : [];
+      if (!ops.length || ops.length > MAX_BATCH) return json(400, { error: `Servono da 1 a ${MAX_BATCH} operazioni.` });
+      const results = [];
+      const seenDocs = [];
+      for (const [i, op] of ops.entries()) {
+        try {
+          if (op?.action === "delete") {
+            if (!COLLECTIONS.includes(op.collection) || !validId(op.id)) throw new HttpError(400, "Richiesta non valida.");
+            await store.delete(`${op.collection}/${op.id}`);
+            results.push({ i, ok: true, id: op.id });
+          } else if (op?.action === "put") {
+            const item = await upsert(store, name, op);
+            if (op.collection === "docs") seenDocs.push([item.id, item.version]);
+            results.push({ i, ok: true, id: item.id });
+          } else {
+            throw new HttpError(400, "Azione non valida: usa put o delete.");
+          }
+        } catch (err) {
+          if (!(err instanceof HttpError)) throw err;
+          results.push({ i, ok: false, error: err.message });
+        }
+      }
+      await markSeen(store, me, seenDocs);
+      return json(200, { results });
+    }
+
+    if (route === "seen" && req.method === "POST") {
+      const body = await req.json().catch(() => ({}));
+      if (!validId(body.id)) return json(400, { error: "Richiesta non valida." });
+      const doc = await store.get(`docs/${body.id}`, { type: "json" });
+      if (!doc) return json(404, { error: "Documento non trovato." });
+      await markSeen(store, me, [[body.id, doc.version || 1]]);
+      return json(200, { ok: true });
+    }
+
+    if (route === "users" || route.startsWith("users/")) {
+      if (!isAdmin) return json(403, { error: "Solo l'amministratore può gestire gli account." });
+      const save = (list) => store.setJSON(USERS_KEY, { users: list });
+
+      if (route === "users" && req.method === "GET") {
+        return json(200, { users: users.map(publicUser) });
+      }
+
+      if (route === "users" && req.method === "POST") {
+        const body = await req.json().catch(() => ({}));
+        const newName = clean(body.name, 80).trim().replace(/\s+/g, " ");
+        if (!newName) return json(400, { error: "Scrivi nome e cognome." });
+        if (users.some((u) => u.name.toLowerCase() === newName.toLowerCase())) {
+          return json(400, { error: "Esiste già un account con questo nome." });
+        }
+        const code = newCode();
+        const user = {
+          id: crypto.randomUUID(),
+          name: newName,
+          hash: await hashCode(code),
+          role: pick(body.role, ROLES, "membro"),
+          createdAt: new Date().toISOString(),
+          createdBy: name,
+        };
+        await save([...users, user]);
+        return json(200, { user: publicUser(user), code });
+      }
+
+      const id = url.searchParams.get("id") || "";
+      const target = users.find((u) => u.id === id);
+      if (!target) return json(404, { error: "Account non trovato." });
+
+      if (route === "users/code" && req.method === "POST") {
+        const code = newCode();
+        const hash = await hashCode(code);
+        await save(users.map((u) => (u.id === id ? { ...u, hash } : u)));
+        return json(200, { user: publicUser(target), code });
+      }
+
+      if (route === "users" && req.method === "DELETE") {
+        if (target.id === me.id) return json(400, { error: "Non puoi eliminare il tuo account." });
+        await save(users.filter((u) => u.id !== id));
+        await store.delete(SEEN_PREFIX + id);
+        return json(200, { ok: true });
+      }
     }
 
     if (route === "ai" && req.method === "POST") {
       const body = await req.json().catch(() => ({}));
       const [tasks, docs, events, notes] = await Promise.all(COLLECTIONS.map((c) => readItems(store, c)));
       const answer = await askGemini(body.question, Array.isArray(body.history) ? body.history : [], {
+        organizzatori: peopleOf(users),
         tasks,
         docs,
         events,
@@ -205,6 +372,7 @@ export default async (req) => {
 
     return json(404, { error: "Percorso non trovato." });
   } catch (err) {
+    if (err instanceof HttpError) return json(err.status, { error: err.message });
     console.error(err);
     return json(500, { error: err.message || "Errore del server." });
   }

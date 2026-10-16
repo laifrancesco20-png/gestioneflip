@@ -345,6 +345,20 @@ main {
 .doc h3 { font-size: 17px; font-weight: 800; color: var(--primary); overflow-wrap: anywhere; }
 .byline { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: 13px; flex-wrap: wrap; }
 .byline .sep { color: var(--faint); }
+.doc.is-new { box-shadow: var(--shadow), inset 4px 0 0 #2563eb; }
+.newbar { display: flex; align-items: center; gap: 8px; background: var(--blue-bg); color: #1e40af; border-radius: 10px; padding: 8px 8px 8px 12px; font-size: 13px; font-weight: 600; }
+.newbar .txt { flex: 1; min-width: 0; }
+.newbar .btn { padding: 6px 12px; font-size: 12px; min-height: 0; }
+.docs-hint { margin: 0; font-size: 12px; color: var(--muted); display: flex; gap: 6px; align-items: flex-start; }
+.user-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+.user-row .info { flex: 1; min-width: 0; }
+.user-row .info b { display: block; color: var(--ink); overflow-wrap: anywhere; }
+.user-row small { color: var(--muted); font-size: 12px; }
+.user-row .icon-btn.armed { background: var(--danger-bg); color: var(--danger-ink); width: auto; padding: 0 10px; font-size: 12px; font-weight: 700; }
+.codebox { display: flex; align-items: center; gap: 8px; background: var(--ok-bg); border-radius: 10px; padding: 10px 12px; }
+.codebox code { flex: 1; font-size: 20px; font-weight: 800; letter-spacing: .08em; color: #065f46; }
+.admin-block, .sheet-sub { grid-column: 1 / -1; min-width: 0; }
+.sheet-sub { font-size: 15px; font-weight: 800; color: var(--primary); margin-top: 6px; }
 .file { display: flex; align-items: center; gap: 10px; background: var(--surface-2); border-radius: 10px; padding: 10px 12px; text-decoration: none; color: var(--primary); font-weight: 700; font-size: 13px; min-width: 0; }
 .file .fname { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .file .ms:first-child { color: var(--danger); }
@@ -530,6 +544,7 @@ main {
       </div>
     </div>
     <div class="top-actions">
+      <button class="icon-btn" id="admin-btn" type="button" data-act="admin" aria-label="Gestisci account" title="Gestisci account" hidden><span class="ms">manage_accounts</span></button>
       <span id="me-avatar"></span>
       <button class="icon-btn" type="button" data-act="logout" aria-label="Esci" title="Esci"><span class="ms">logout</span></button>
     </div>
@@ -569,6 +584,7 @@ main {
           <button class="btn btn-dark btn-square" type="button" data-act="new-doc" aria-label="Nuovo documento" title="Nuovo documento"><span class="ms">note_add</span></button>
         </div>
         <div class="chips" id="doc-filters"></div>
+        <p class="docs-hint"><span class="ms sm">info</span><span>Hai modificato un file su OneDrive o Drive? Premi <b>Nuova versione</b>: agli altri il documento comparirà come aggiornato finché non lo aprono.</span></p>
         <div class="docs" id="l-docs"></div>
       </section>
 
@@ -691,7 +707,7 @@ const store = {
 };
 
 let code = store.get("fip-code") || "";
-let S = { me: "", people: [], tasks: [], docs: [], events: [], notes: [] };
+let S = { me: "", isAdmin: false, people: [], tasks: [], docs: [], events: [], notes: [], seen: {} };
 let lastKey = "";
 const ui = {
   tab: store.get("fip-tab") || "oggi",
@@ -749,6 +765,20 @@ function fileName(link) {
 const options = (values, selected, labels = {}) =>
   values.map((v) => `<option value="${esc(v)}" ${v === selected ? "selected" : ""}>${esc(labels[v] || v)}</option>`).join("");
 
+// Documenti con una versione che non ho ancora aperto.
+const seenVer = (d) => (S.seen || {})[d.id] || 0;
+const isUnseen = (d) => seenVer(d) < (d.version || 1);
+function lastUpload(d) {
+  const h = (d.history || []).find((x) => x.version === d.version);
+  return h ? { by: h.by, at: h.at } : { by: d.updatedBy, at: d.updatedAt };
+}
+function unseenText(d) {
+  const up = lastUpload(d);
+  return seenVer(d) === 0
+    ? `Nuovo: aggiunto da <b>${esc(up.by)}</b>, ${esc(relTime(up.at))}`
+    : `Aggiornato a v${d.version} da <b>${esc(up.by)}</b>, ${esc(relTime(up.at))}. Tu avevi visto la v${seenVer(d)}.`;
+}
+
 /* ===================== server ===================== */
 async function api(path, opts = {}) {
   const res = await fetch("/api/" + path, {
@@ -779,6 +809,14 @@ async function patchItem(col, id, changes) {
   const { id: _id, createdBy, createdAt, updatedBy, updatedAt, ...data } = item;
   await saveItem(col, { ...data, ...changes }, id);
 }
+async function markDocSeen(id) {
+  const d = S.docs.find((x) => x.id === id);
+  if (!d || !isUnseen(d)) return;
+  S.seen = { ...S.seen, [id]: d.version };
+  renderAll();
+  await api("seen", { method: "POST", body: { id } });
+  await refresh();
+}
 async function deleteItem(col, id) {
   await api(`item?collection=${col}&id=${encodeURIComponent(id)}`, { method: "DELETE" });
   await refresh();
@@ -792,10 +830,13 @@ function toast(msg) {
 
 /* ===================== navigazione ===================== */
 function renderNav() {
-  const mine = S.tasks.filter((t) => t.owner === S.me && t.status !== "done").length;
+  const badges = {
+    compiti: S.tasks.filter((t) => t.owner === S.me && t.status !== "done").length,
+    documenti: S.docs.filter(isUnseen).length,
+  };
   const html = TABS.map((t) => `
     <button type="button" class="navbtn" data-go="${t.id}" ${ui.tab === t.id ? 'aria-current="page"' : ""}>
-      ${ic(t.icon)}<span>${t.label}</span>${t.id === "compiti" && mine ? `<span class="badge">${mine}</span>` : ""}
+      ${ic(t.icon)}<span>${t.label}</span>${badges[t.id] ? `<span class="badge">${badges[t.id]}</span>` : ""}
     </button>`).join("");
   $("#bottomnav").innerHTML = html;
   $("#sidenav").innerHTML = html;
@@ -835,7 +876,8 @@ function docCard(d) {
   const history = [...(d.history || [])].reverse();
   const canConfirm = d.status === "bozza" || d.status === "da_confermare";
   return `
-  <article class="card doc" data-col="docs" data-id="${esc(d.id)}">
+  <article class="card doc ${isUnseen(d) ? "is-new" : ""}" data-col="docs" data-id="${esc(d.id)}">
+    ${isUnseen(d) ? `<div class="newbar">${ic("fiber_new", "sm")}<span class="txt">${unseenText(d)}</span><button type="button" class="btn btn-light" data-act="seen">Visto</button></div>` : ""}
     <div class="doc-top">
       <span class="ver">v${d.version}</span>
       <span class="tag ${DOC_TAG[d.status]}">${ic(d.status === "confermato" ? "check_circle" : d.status === "inviato" ? "send" : "fiber_manual_record", "xs")} ${DOC_STATUS[d.status]}</span>
@@ -843,7 +885,7 @@ function docCard(d) {
     </div>
     <h3>${esc(d.title)}</h3>
     <div class="byline">${avatar(d.owner, "xs")} <span>${esc(d.owner || "Nessun responsabile")}</span><span class="sep">•</span><span>da ${esc(firstName(d.updatedBy))}, ${esc(relTime(d.updatedAt))}</span></div>
-    ${d.link ? `<a class="file" href="${esc(d.link)}" target="_blank" rel="noopener noreferrer">${ic("draft")}<span class="fname">${esc(fileName(d.link))}</span>${ic("open_in_new", "sm")}</a>` : ""}
+    ${d.link ? `<a class="file" href="${esc(d.link)}" target="_blank" rel="noopener noreferrer" data-seen>${ic("draft")}<span class="fname">${esc(fileName(d.link))}</span>${ic("open_in_new", "sm")}</a>` : ""}
     <div class="two-btn">
       ${canConfirm
         ? `<button type="button" class="btn btn-green" data-act="confirm">${ic("verified")} Conferma</button>`
@@ -891,6 +933,7 @@ function renderOggi() {
   const mine = S.tasks.filter((x) => x.owner === S.me && x.status !== "done")
     .sort((a, b) => isLate(b) - isLate(a) || (a.due || "9999").localeCompare(b.due || "9999"));
   const waiting = S.docs.filter((d) => d.status === "da_confermare");
+  const unseen = S.docs.filter(isUnseen).sort((a, b) => (b.updatedAt || "").localeCompare(a.updatedAt || ""));
   const limit = keyOf(addDays(now, 14));
   const soon = S.events.filter((e) => e.date >= t && e.date <= limit);
   const featured = soon.find((e) => e.kind === "riunione");
@@ -924,6 +967,23 @@ function renderOggi() {
         <button type="button" class="btn btn-light btn-block" data-go="compiti">Vedi tutti i compiti (${S.tasks.length}) ${ic("arrow_forward")}</button>
       </section>
 
+      ${unseen.length ? `
+      <section class="section">
+        <div class="section-head"><h2 style="--h:#2563eb">Documenti aggiornati da vedere</h2><span class="tag tag-blue">${unseen.length} ${unseen.length === 1 ? "nuovo" : "nuovi"}</span></div>
+        ${unseen.slice(0, 4).map((d) => `
+          <article class="card doc-mini" data-col="docs" data-id="${esc(d.id)}">
+            <div class="row">
+              <span class="doc-icon">${ic("fiber_new")}</span>
+              <div style="min-width:0"><h3>${esc(d.title)}</h3><p class="muted" style="font-size:12px">${unseenText(d)}</p></div>
+            </div>
+            <div class="two-btn">
+              ${d.link ? `<a class="btn btn-light" href="${esc(d.link)}" target="_blank" rel="noopener noreferrer" data-seen>${ic("open_in_new")} Apri file</a>` : `<button type="button" class="btn btn-light" data-go="documenti">${ic("visibility")} Apri</button>`}
+              <button type="button" class="btn btn-light" data-act="seen">${ic("done_all")} Visto</button>
+            </div>
+          </article>`).join("")}
+        ${unseen.length > 4 ? `<button type="button" class="btn btn-light btn-block" data-go="documenti">Vedi tutti (${unseen.length}) ${ic("arrow_forward")}</button>` : ""}
+      </section>` : ""}
+
       <section class="section">
         <div class="section-head" style="--h:var(--danger)"><h2 style="--h:var(--danger)">Documenti da confermare</h2>${waiting.length ? `<span class="tag tag-danger-soft">${waiting.length} in attesa</span>` : ""}</div>
         ${waiting.length ? waiting.map((d) => `
@@ -934,7 +994,7 @@ function renderOggi() {
             </div>
             ${d.owner === S.me ? `<div class="notice">${ic("pending_actions", "sm")} Richiede la tua conferma</div>` : ""}
             <div class="two-btn">
-              ${d.link ? `<a class="btn btn-light" href="${esc(d.link)}" target="_blank" rel="noopener noreferrer">${ic("visibility")} Revisiona</a>` : `<button type="button" class="btn btn-light" data-go="documenti">${ic("visibility")} Apri</button>`}
+              ${d.link ? `<a class="btn btn-light" href="${esc(d.link)}" target="_blank" rel="noopener noreferrer" data-seen>${ic("visibility")} Revisiona</a>` : `<button type="button" class="btn btn-light" data-go="documenti">${ic("visibility")} Apri</button>`}
               <button type="button" class="btn btn-green" data-act="confirm">${ic("check_circle")} Conferma</button>
             </div>
           </article>`).join("") : `<div class="empty">Nessun documento in attesa di conferma.</div>`}
@@ -1026,18 +1086,18 @@ function renderTasks() {
 /* ===================== DOCUMENTI ===================== */
 function renderDocs() {
   const q = ($("#doc-q").value || "").trim().toLowerCase();
-  const counts = { all: S.docs.length };
+  const counts = { all: S.docs.length, nuovi: S.docs.filter(isUnseen).length };
   for (const s of Object.keys(DOC_STATUS)) counts[s] = S.docs.filter((d) => d.status === s).length;
-  const filters = [["all", "Tutti"], ["da_confermare", "Da confermare"], ["bozza", "Bozze"], ["confermato", "Confermati"], ["inviato", "Inviati"]];
+  const filters = [["all", "Tutti"], ...(counts.nuovi || ui.docFilter === "nuovi" ? [["nuovi", "Da vedere"]] : []), ["da_confermare", "Da confermare"], ["bozza", "Bozze"], ["confermato", "Confermati"], ["inviato", "Inviati"]];
   $("#doc-filters").innerHTML = filters.map(([k, label]) => `
     <button type="button" class="chip ${ui.docFilter === k ? "on" : ""}" data-docfilter="${k}">
-      ${k !== "all" ? `<i class="dot" style="--c:${DOC_DOT[k]}"></i>` : ""}${label} <span class="count">${counts[k]}</span>
+      ${DOC_DOT[k] ? `<i class="dot" style="--c:${DOC_DOT[k]}"></i>` : k === "nuovi" ? `<i class="dot" style="--c:#2563eb"></i>` : ""}${label} <span class="count">${counts[k]}</span>
     </button>`).join("");
   const order = { da_confermare: 0, bozza: 1, confermato: 2, inviato: 3 };
   const list = S.docs
-    .filter((d) => ui.docFilter === "all" || d.status === ui.docFilter)
+    .filter((d) => ui.docFilter === "all" || (ui.docFilter === "nuovi" ? isUnseen(d) : d.status === ui.docFilter))
     .filter((d) => !q || `${d.title} ${d.owner} ${d.link}`.toLowerCase().includes(q))
-    .sort((a, b) => order[a.status] - order[b.status] || (b.updatedAt || "").localeCompare(a.updatedAt || ""));
+    .sort((a, b) => isUnseen(b) - isUnseen(a) || order[a.status] - order[b.status] || (b.updatedAt || "").localeCompare(a.updatedAt || ""));
   $("#l-docs").innerHTML = list.length ? list.map(docCard).join("")
     : `<div class="empty">${S.docs.length ? "Nessun documento corrisponde alla ricerca." : "Nessun documento. Usa il pulsante in alto per aggiungerne uno."}</div>`;
 }
@@ -1150,6 +1210,7 @@ function renderNotes() {
 
 function renderAll() {
   $("#me-avatar").innerHTML = avatar(S.me, "sm");
+  $("#admin-btn").hidden = !S.isAdmin;
   renderNav();
   renderOggi();
   renderTasks();
@@ -1278,6 +1339,66 @@ function openNoteForm(id) {
   });
 }
 
+/* ===================== account (solo amministratore) ===================== */
+const KEEP_OPEN = Symbol("keep-open");
+const ROLE = { membro: "Organizzatore", admin: "Amministratore", servizio: "Servizio (accesso per Claude)" };
+let adminUsers = [];
+function adminBody(shown) {
+  const order = { admin: 0, membro: 1, servizio: 2 };
+  const users = [...adminUsers].sort((a, b) => order[a.role] - order[b.role] || a.name.localeCompare(b.name));
+  return `
+    ${shown ? `
+      <div class="admin-block">
+        <p class="hint" style="margin:0 0 6px">Codice di <b>${esc(shown.name)}</b>: copialo ora e mandalo solo a questa persona. Non verrà più mostrato.</p>
+        <div class="codebox"><code>${esc(shown.code)}</code><button type="button" class="btn btn-light" data-act="copy-code" data-code="${esc(shown.code)}">${ic("content_copy", "sm")} Copia</button></div>
+      </div>` : ""}
+    <div class="admin-block">${users.map((u) => `
+      <div class="user-row" data-id="${esc(u.id)}">
+        ${avatar(u.name, "sm")}
+        <div class="info"><b>${esc(u.name)}${u.name === S.me ? " (tu)" : ""}</b><small>${esc(ROLE[u.role] || u.role)}</small></div>
+        <button type="button" class="icon-btn" data-act="user-code" title="Genera un nuovo codice" aria-label="Nuovo codice per ${esc(u.name)}">${ic("key")}</button>
+        ${u.name === S.me ? "" : `<button type="button" class="icon-btn" data-act="user-del" title="Elimina account" aria-label="Elimina ${esc(u.name)}">${ic("person_remove")}</button>`}
+      </div>`).join("")}</div>
+    <h3 class="sheet-sub">Aggiungi una persona</h3>
+    ${fieldInput("Nome e cognome", "name", "", 'required maxlength="80" placeholder="Es. Mario Rossi" autocomplete="off"')}
+    ${fieldSelect("Tipo di account", "role", Object.keys(ROLE), "membro", ROLE)}
+    <p class="hint">Con un nuovo codice quello vecchio smette di funzionare. Chi viene eliminato non entra più, ma compiti e documenti a suo nome restano.</p>`;
+}
+const showAdmin = (shown) => { $("#sheet-body").innerHTML = adminBody(shown); $("#sheet-err").textContent = ""; };
+async function openAdmin() {
+  const { users } = await api("users");
+  adminUsers = users;
+  openSheet({
+    title: "Account del team",
+    submit: "Crea account",
+    body: adminBody(),
+    onSubmit: async ({ name, role }) => {
+      const res = await api("users", { method: "POST", body: { name, role } });
+      adminUsers.push(res.user);
+      showAdmin({ name: res.user.name, code: res.code });
+      refresh().catch(() => {});
+      return KEEP_OPEN;
+    },
+  });
+}
+async function userAction(act, id, button) {
+  const u = adminUsers.find((x) => x.id === id);
+  if (!u) return;
+  if (act === "user-code") {
+    const res = await api(`users/code?id=${encodeURIComponent(id)}`, { method: "POST" });
+    if (u.name === S.me) { code = res.code; store.set("fip-code", code); }
+    return showAdmin({ name: u.name, code: res.code });
+  }
+  if (act === "user-del") {
+    if (!button.classList.contains("armed")) { button.classList.add("armed"); button.textContent = "Elimina?"; return; }
+    await api(`users?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+    adminUsers = adminUsers.filter((x) => x.id !== id);
+    showAdmin();
+    toast(`${u.name} eliminato`);
+    return refresh();
+  }
+}
+
 /* ===================== assistente ===================== */
 const chatHistory = [];
 function mdLite(text) {
@@ -1372,9 +1493,8 @@ document.addEventListener("submit", async (e) => {
     const btn = $("#sheet-submit");
     btn.disabled = true;
     try {
-      await sheetHandler(Object.fromEntries(new FormData(form)));
-      closeSheet();
-      toast("Salvato");
+      const result = await sheetHandler(Object.fromEntries(new FormData(form)));
+      if (result !== KEEP_OPEN) { closeSheet(); toast("Salvato"); }
     } catch (err) {
       $("#sheet-err").textContent = err.message;
     } finally { btn.disabled = false; }
@@ -1386,6 +1506,7 @@ document.addEventListener("click", async (e) => {
   let x;
 
   if (el("[data-close]") || e.target.id === "sheet") return closeSheet();
+  if ((x = el("[data-seen]"))) { const id = x.closest("[data-id]")?.dataset.id; if (id) markDocSeen(id).catch(() => {}); return; }
   if ((x = el("[data-go]"))) return showTab(x.dataset.go);
   if ((x = el("[data-ask]"))) return askAssistant(x.dataset.ask);
   if ((x = el("[data-taskview]"))) { ui.taskView = x.dataset.taskview; store.set("fip-taskview", ui.taskView); return renderTasks(); }
@@ -1416,6 +1537,10 @@ document.addEventListener("click", async (e) => {
     const id = holder?.dataset.id;
     try {
       if (act === "logout") return logout();
+      if (act === "admin") return await openAdmin();
+      if (act === "user-code" || act === "user-del") return await userAction(act, id, x);
+      if (act === "copy-code") { await navigator.clipboard.writeText(x.dataset.code); return toast("Codice copiato"); }
+      if (act === "seen") { await markDocSeen(id); return toast("Segnato come visto"); }
       if (act === "new-doc") return openDocForm();
       if (act === "new-event") return openEventForm(null, ui.tab === "calendario" ? keyOf(ui.calDate) : undefined);
       if (act === "new-note") return openNoteForm();
