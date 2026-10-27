@@ -143,8 +143,7 @@ p { margin: 0; }
 .search { display: flex; align-items: center; gap: 10px; background: var(--surface); border-radius: 12px; box-shadow: var(--shadow); padding: 0 14px; flex: 1; min-width: 0; }
 .search input { border: 0; background: transparent; padding: 13px 0; font-size: 15px; width: 100%; min-width: 0; }
 .search input:focus { outline: none; }
-.chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
-.chips::-webkit-scrollbar { display: none; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip {
   display: inline-flex; align-items: center; gap: 6px; border: 0; border-radius: 999px; padding: 8px 14px;
   background: var(--surface); box-shadow: var(--shadow); color: var(--primary); font-weight: 700; font-size: 13px; white-space: nowrap;
@@ -377,7 +376,7 @@ main {
 
 /* ---------- calendario ---------- */
 .cal-top { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-.cal-top .seg { flex: 1 1 220px; }
+.cal-top { justify-content: flex-end; }
 .cal-layout { display: grid; gap: 20px; }
 @media (min-width: 960px) { .cal-layout { grid-template-columns: minmax(0, 420px) minmax(0, 1fr); align-items: start; } .cal-side { position: sticky; top: 85px; } }
 .cal-side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
@@ -595,7 +594,6 @@ main {
       <!-- CALENDARIO -->
       <section class="view" data-view="calendario" hidden>
         <div class="cal-top">
-          <div class="seg light" id="cal-mode"></div>
           <button class="btn btn-dark" type="button" data-act="new-event"><span class="ms">add_circle</span> Aggiungi impegno</button>
         </div>
         <div class="cal-layout">
@@ -718,7 +716,7 @@ const ui = {
   taskView: store.get("fip-taskview") || "board",
   docFilter: "all",
   noteFilter: "all",
-  calMode: store.get("fip-calmode") || "week",
+  calMode: "month",
   calDate: new Date(),
   calFilter: "all",
 };
@@ -1119,9 +1117,6 @@ function renderCalendar() {
   for (const e of evs) (byDay[e.date] ||= []).push(e);
   for (const k in byDay) byDay[k].sort((a, b) => (a.start || "").localeCompare(b.start || ""));
 
-  $("#cal-mode").innerHTML = `
-    <button type="button" data-calmode="week" class="${ui.calMode === "week" ? "on" : ""}">${ic("view_week")} Settimana</button>
-    <button type="button" data-calmode="month" class="${ui.calMode === "month" ? "on" : ""}">${ic("calendar_view_month")} Mese</button>`;
 
   const ws = weekStart(d), we = addDays(ws, 6);
   const month = new Date(d.getFullYear(), d.getMonth(), 1);
@@ -1596,7 +1591,6 @@ document.addEventListener("click", async (e) => {
   if ((x = el("[data-taskcol]"))) { $("#col-" + x.dataset.taskcol)?.scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" }); return; }
   if ((x = el("[data-docfilter]"))) { ui.docFilter = x.dataset.docfilter; return renderDocs(); }
   if ((x = el("[data-notefilter]"))) { ui.noteFilter = x.dataset.notefilter; return renderNotes(); }
-  if ((x = el("[data-calmode]"))) { ui.calMode = x.dataset.calmode; store.set("fip-calmode", ui.calMode); return renderCalendar(); }
   if ((x = el("[data-calfilter]"))) { ui.calFilter = x.dataset.calfilter; return renderCalendar(); }
   if ((x = el("[data-calnav]"))) {
     const step = Number(x.dataset.calnav);
