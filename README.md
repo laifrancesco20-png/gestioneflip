@@ -4,7 +4,15 @@ App semplice per i 5 organizzatori: compiti, documenti con versione e stato, cal
 
 ## Struttura
 - `public/index.html`: l'interfaccia (un solo file, nessuna dipendenza).
-- `netlify/functions/api.mjs`: API. Gestisce i codici personali, salva i dati su Netlify Blobs e chiama Gemini lato server, così la chiave non finisce mai nel browser.
+- `lib/app.mjs`: API. Gestisce i codici personali, i dati e chiama Gemini lato server, così la chiave non finisce mai nel browser.
+- `api/index.mjs` + `lib/redis-store.mjs` + `vercel.json`: versione Vercel, dati su Upstash Redis.
+- `netlify/functions/api.mjs` + `netlify.toml`: versione Netlify, dati su Netlify Blobs.
+
+## Pubblicazione su Vercel
+1. Progetto Vercel collegato al repository, senza comando di build (la cartella pubblica è `public`).
+2. Storage > Create Database > Upstash for Redis (piano Free), collegato al progetto: aggiunge da solo `KV_REST_API_URL` e `KV_REST_API_TOKEN`.
+3. Variabili: `ADMIN_NAMES`, `GEMINI_API_KEY`, `GEMINI_MODEL` (facoltativa) come sotto.
+4. Trasloco dei dati: con `MIGRATE_FROM` (indirizzo del vecchio sito) e lo stesso `MIGRATION_TOKEN` impostato su entrambi i siti, la prima richiesta a un database vuoto copia tutto da `GET /api/export` del vecchio sito. Finito il trasloco, togli `MIGRATION_TOKEN` da entrambi.
 
 ## Pubblicazione su Netlify
 1. Crea un sito Netlify collegato a questa cartella (o a un repository GitHub con questi file).
