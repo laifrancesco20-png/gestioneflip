@@ -1532,7 +1532,7 @@ document.addEventListener("submit", async (e) => {
     const btn = form.querySelector("button[type=submit]");
     btn.disabled = true;
     try {
-      const res = await fetch("/api/login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ code: typed }) });
+      const res = await fetch("/api/login", { method: "POST", headers: { "content-type": "application/json", "x-code": typed }, body: JSON.stringify({ code: typed }) });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.error || "Codice non valido.");
       code = typed; store.set("fip-code", code);

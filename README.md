@@ -12,7 +12,7 @@ App semplice per i 5 organizzatori: compiti, documenti con versione e stato, cal
 1. Progetto Vercel collegato al repository, senza comando di build (la cartella pubblica è `public`).
 2. Storage > Create Database > Upstash for Redis (piano Free), collegato al progetto: aggiunge da solo `KV_REST_API_URL` e `KV_REST_API_TOKEN`.
 3. Variabili: `ADMIN_NAMES`, `GEMINI_API_KEY`, `GEMINI_MODEL` (facoltativa) come sotto.
-4. Trasloco dei dati: con `MIGRATE_FROM` (indirizzo del vecchio sito) e lo stesso `MIGRATION_TOKEN` impostato su entrambi i siti, la prima richiesta a un database vuoto copia tutto da `GET /api/export` del vecchio sito. Finito il trasloco, togli `MIGRATION_TOKEN` da entrambi.
+4. Trasloco dei dati: con `MIGRATE_FROM` (indirizzo del vecchio sito) e il database vuoto, il primo accesso dell'amministratore copia tutto da `GET /api/export` del vecchio sito, usando il suo codice. Finché non succede, gli altri vedono un messaggio che chiede di aspettare.
 
 ## Pubblicazione su Netlify
 1. Crea un sito Netlify collegato a questa cartella (o a un repository GitHub con questi file).
